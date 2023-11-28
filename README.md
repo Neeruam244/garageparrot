@@ -46,26 +46,4 @@ Cliquez sur l'icône WampServer dans la barre des tâches pour ouvrir le menu. S
 <h3>Informations</h3>
 <p>Pour acceder au panel administrateur, Tapez l'adresse suivante dans la barre d'adresse : http://localhost/NOM_DU_REPERTOIRE_DE_VOTRE_SITE/admin.php <br>
 
-Pour tester les modes administrateurs et employés, des comptes 'exemples' ont été créés et insérés dans la base de donnée :</p>
 
-<table>
-  <thead>
-    <th>Email</th>
-    <th>Mot de passe</th>
-    <th>Role</th>
-  </thead>
-  <tbody>
-    <tr>
-      <td>admin@test.fr</td>
-      <td>admin</td>
-      <td>Administrateur</td>
-    </tr>
-    <tr>
-      <td>employe@test.fr</td>
-      <td>1234</td>
-      <td>Employé</td>
-    </tr>
-  </tbody>
-</table>
-
-<p>Le projet est aussi deployer en ligne à cette adresse : blabla </p>
