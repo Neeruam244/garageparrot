@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Repository\CarRepository;
+use App\Repository\ServicesRepository;
 
-class CarController extends Controller
+class ServicesController extends Controller
 {
     public function route(): void
     {
@@ -53,12 +53,13 @@ class CarController extends Controller
             if (isset($_GET['id'])) {
 
                 $id = (int)$_GET['id'];
-                $carRepository = new carRepository();
-                $car = $carRepository->findOneById($id);
+                // Charger la mission par un appel au repository
+                $servicesRepository = new servicesRepository();
+                $services = $servicesRepository->findOneById($id);
 
 
-                $this->render('car/show', [
-                    'car' => $car
+                $this->render('services/show', [
+                    'services' => $services
                 ]);
             } else {
                 throw new \Exception("L'id est manquant");
@@ -73,12 +74,12 @@ class CarController extends Controller
     protected function list()
     {
         try{
-            $carRepository = new carRepository();
-            $car = $carRepository->findAll();
+            $servicesRepository = new servicesRepository();
+            $services = $servicesRepository->findAll();
 
 
-            $this->render('car/list', [
-                'car' => $car
+            $this->render('services/list', [
+                'services' => $services
             ]);
             
         } catch(\Exception $e) {
@@ -93,7 +94,7 @@ class CarController extends Controller
         try {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Vérification des données POST
-                $requiredFields = ['brand', 'model', 'description', 'created_at', 'year', 'mileage', 'energy', 'price', 'transmission', 'color', 'door_number', 'fiscal_power', 'interior_equipments', 'exterior_equipments', 'security_equipments', 'others_equipments', 'picture'];
+                $requiredFields = ['title', 'text_presentation', 'list', 'picture'];
     
                 $missingFields = [];
                 foreach ($requiredFields as $field) {
@@ -104,49 +105,36 @@ class CarController extends Controller
     
                 if (empty($missingFields)) {
                     // Récupération des données du formulaire POST
-                    $car = [
-                        'brand' => $_POST['brand'],
-                        'model' => $_POST['model'],
-                        'description' => $_POST['description'],
-                        'created_at' => $_POST['created_at'],
-                        'year' => $_POST['year'],
-                        'mileage' => $_POST['mileage'],
-                        'energy' => $_POST['energy'],
-                        'price' => $_POST['price'],
-                        'transmission' => $_POST['transmission'],
-                        'color' => $_POST['color'],
-                        'door_number' => $_POST['door_number'],
-                        'fiscal_power' => $_POST['fiscal_power'],
-                        'interior_equipments' => $_POST['interior_equipments'],
-                        'exterior_equipments' => $_POST['exterior_equipments'],
-                        'security_equipments' => $_POST['security_equipments'],
-                        'others_equipments' => $_POST['others_equipments'],
+                    $services = [
+                        'title' => $_POST['title'],
+                        'text_presentation' => $_POST['text_presentation'],
+                        'list' => $_POST['list'],
                         'picture' => $_POST['picture']
                     ];
     
                     // Appel au repository pour ajouter la mission
-                    $carRepository = new CarRepository();
-                    $success = $carRepository->addCar($car);
+                    $servicesRepository = new servicesRepository();
+                    $success = $servicesRepository->addServices($services);
     
                     if ($success) {
                         // Redirection après succès
-                        header('Location: /car/list');
+                        header('Location: /services/list');
                         exit();
                     } else {
                         // Gérer l'erreur d'ajout de mission dans le repository
                         $this->render('errors/default', [
-                            'error' => "Echec pour ajouter un véhicule dans le repository."
+                            'error' => "Echec pour ajouter un service dans le repository."
                         ]);
                     }
                 } else {
                     // Gérer les erreurs de données manquantes
-                    $this->render('car/add', [
+                    $this->render('services/add', [
                         'error' => 'Il manque des informations: ' . implode(', ', $missingFields)
                     ]);
                 }
             } else {
                 // Afficher le formulaire d'ajout de mission
-                $this->render('car/add');
+                $this->render('services/add');
             }
         } catch (\Exception $e) {
             // Gérer les erreurs génériques
@@ -161,14 +149,14 @@ class CarController extends Controller
         try {
             if (isset($_GET['id'])) {
                 $id = (int)$_GET['id'];
-                // Charger la voiture par un appel au repository
-                $carRepository = new CarRepository();
-                $car = $carRepository->findOneById($id);
+                // Charger la mission par un appel au repository
+                $servicesRepository = new servicesRepository();
+                $services = $servicesRepository->findOneById($id);
 
-                if ($car) {
-                    // Afficher le formulaire d'édition avec les données de la voiture
-                    $this->render('car/edit', [
-                        'car' => $car
+                if ($services) {
+                    // Afficher le formulaire d'édition avec les données de la mission
+                    $this->render('services/edit', [
+                        'services' => $services
                     ]);
                 } else {
                     throw new \Exception("Véhicule non trouvée");
@@ -191,11 +179,11 @@ class CarController extends Controller
             if (isset($_GET['id'])) {
                 $id = (int)$_GET['id'];
 
-                $carRepository = new CarRepository();
-                $success = $carRepository->deleteCar($id);
+                $servicesRepository = new servicesRepository();
+                $success = $servicesRepository->deleteServices($id);
 
                 if ($success) {
-                    // Rediriger vers la liste des véhicules après la suppression réussie
+                    // Rediriger vers la liste des missions après la suppression réussie
                     header("Location: /index.php");
                     exit;
                 } else {

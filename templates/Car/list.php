@@ -1,4 +1,4 @@
-<?php  require_once _ROUTE_.'\templates\header.php'; ?>
+<?php  require_once _ROOTPATH_.'\templates\header.php'; ?>
 
 <h2 class="title-car">Nos voitures d'occasions</h2>
 
@@ -42,9 +42,8 @@
 <!-- La card des voitures d'occasion -->
 
 <section class="container">
-
+<?php  foreach ($car as $c) : ?>
 <div class="wrapper">
-    <?php  foreach ($car as $c) : ?>
     <div class="product-img">
         <img src="<?= $c["picture"]?>" class="img-card">
     </div>
@@ -54,12 +53,11 @@
         <h2 class=subtitle-card><?= $c["description"]?></h2>
         <p class=para-card>Année :<?= $c["year"]?>  <br> Kilométrage : <?= $c["mileage"]?> <br> Energie : <?= $c["energy"]?> </p>
         <p class="price"><strong><?= $c["price"]?></strong></p>
-        <form action="index.php?controller=car&action=show&id=<?= $c["id_car"]?>" method="get" target="_blanck"><button type="submit" class="btn1 outline" >Details</button></form>
+        <form action="index.php?controller=car&action=show&id=<?= $c["id_car"]?>" method="get" target="_blanck"><button type="submit" class="btn1 outline" >Details</button></form> 
+      </div>
     </div>
-    <?php endforeach; ?> 
-    </div>
-  </div>
-
+</div>
+<?php endforeach; ?>
 </section> 
 
-<?php  require_once _ROUTE_.'\templates\footer.php'; ?>
+<?php  require_once _ROOTPATH_.'\templates\footer.php'; ?>

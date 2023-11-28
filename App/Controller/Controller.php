@@ -18,6 +18,26 @@ class Controller
                         $pageController = new CarController();
                         $pageController->route();
                         break;
+                    case 'opinion': 
+                        $pageController = new OpinionController();
+                        $pageController->route();
+                        break;
+                    case 'publish': 
+                        $pageController = new PublishController();
+                        $pageController->route();
+                        break;
+                    case 'services': 
+                        $pageController = new ServicesController();
+                        $pageController->route();
+                        break;
+                    case 'planning': 
+                        $pageController = new PlanningController();
+                        $pageController->route();
+                        break;
+                    case 'user': 
+                        $pageController = new UserController();
+                        $pageController->route();
+                        break;
                     default : 
                         throw new \Exception("Le controleur n'existe pas");
                         break;
@@ -37,7 +57,7 @@ class Controller
 
     protected function render(string $path, array $params = []): void
     {
-        $filePath = _ROUTE_.'/templates/'.$path.'.php';
+        $filePath = _ROOTPATH_.'/templates/'.$path.'.php';
 
         try{
             if (!file_exists($filePath)){

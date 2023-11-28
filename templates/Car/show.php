@@ -1,4 +1,4 @@
-<?php  require_once _ROUTE_.'\templates\header.php'; ?>
+<?php  require_once _ROOTPATH_.'\templates\header.php'; ?>
 
 <div class="corps-presentation">
                 <div class="gauche">
@@ -12,7 +12,7 @@
                 <div class="droite">
                     <div class="slide-container">
                         <div class="custom-slider fade" style="text-align: center;">
-                          <img class="slide-img" src="<?= $car->getPicture()?>">
+                          <img class="slide-img" src="<?= $car->getPicture1()?>">
                         </div>
 
                         <div class="custom-slider fade" style="text-align: center;">
@@ -33,23 +33,24 @@
 
                         <div class="custom-slider fade" style="text-align: center;">
                             <img class="slide-img" src="Photos/véhicules d'occasions/clio4/clio6.jpg">
-
                         </div>
-                        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-                        <a class="next" onclick="plusSlides(1)">&#10095;</a>
-                      </div>
 
-                      <div class="slide-dot">
-                        <span class="dot" onclick="currentSlide(1)"></span> 
-                        <span class="dot" onclick="currentSlide(2)"></span> 
-                        <span class="dot" onclick="currentSlide(3)"></span> 
-                        <span class="dot" onclick="currentSlide(4)"></span> 
-                        <span class="dot" onclick="currentSlide(5)"></span> 
-                        <span class="dot" onclick="currentSlide(6)"></span> 
-                      </div>
+                        <div>
+                            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+                        </div>
+
+                        <div class="slide-dot">
+                            <span class="dot" onclick="currentSlide(1)"></span> 
+                            <span class="dot" onclick="currentSlide(2)"></span> 
+                            <span class="dot" onclick="currentSlide(3)"></span> 
+                            <span class="dot" onclick="currentSlide(4)"></span> 
+                            <span class="dot" onclick="currentSlide(5)"></span> 
+                            <span class="dot" onclick="currentSlide(6)"></span> 
+                        </div>
                   
+                    </div>
                 </div>
-            </div>
 
             <!-- tableaux -->
             <div class="tableaux">
@@ -130,7 +131,7 @@
                 </table>
             </div>
             <div class="pourcontact">
-                <a href="#"><p>Pour plus de renseignements, cliquer ici !</p></a>
+                <a href="index.php?controller=page&action=contact"><p>Pour plus de renseignements, cliquer ici !</p></a>
             </div>
 
-<?php  require_once _ROUTE_.'\templates\footer.php'; ?>
+<?php  require_once _ROOTPATH_.'\templates\footer.php'; ?>

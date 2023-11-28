@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Repository\CarRepository;
+use App\Repository\PlanningRepository;
 
-class CarController extends Controller
+class PlanningController extends Controller
 {
     public function route(): void
     {
@@ -53,12 +53,13 @@ class CarController extends Controller
             if (isset($_GET['id'])) {
 
                 $id = (int)$_GET['id'];
-                $carRepository = new carRepository();
-                $car = $carRepository->findOneById($id);
+                // Charger la mission par un appel au repository
+                $planningRepository = new planningRepository();
+                $planning = $planningRepository->findOneById($id);
 
 
-                $this->render('car/show', [
-                    'car' => $car
+                $this->render('planningr/show', [
+                    'planning' => $planning
                 ]);
             } else {
                 throw new \Exception("L'id est manquant");
@@ -73,12 +74,12 @@ class CarController extends Controller
     protected function list()
     {
         try{
-            $carRepository = new carRepository();
-            $car = $carRepository->findAll();
+            $planningRepository = new planningRepository();
+            $planning = $planningRepository->findAll();
 
 
-            $this->render('car/list', [
-                'car' => $car
+            $this->render('planningr/list', [
+                'planning' => $planning
             ]);
             
         } catch(\Exception $e) {
@@ -93,7 +94,7 @@ class CarController extends Controller
         try {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Vérification des données POST
-                $requiredFields = ['brand', 'model', 'description', 'created_at', 'year', 'mileage', 'energy', 'price', 'transmission', 'color', 'door_number', 'fiscal_power', 'interior_equipments', 'exterior_equipments', 'security_equipments', 'others_equipments', 'picture'];
+                $requiredFields = ['jour1', 'hour1', 'jour2', 'hour2', 'jour3', 'hour3', 'jour4', 'hour4', 'jour5', 'hour5', 'jour6', 'hour6', 'jour7', 'hour7'];
     
                 $missingFields = [];
                 foreach ($requiredFields as $field) {
@@ -104,49 +105,46 @@ class CarController extends Controller
     
                 if (empty($missingFields)) {
                     // Récupération des données du formulaire POST
-                    $car = [
-                        'brand' => $_POST['brand'],
-                        'model' => $_POST['model'],
-                        'description' => $_POST['description'],
-                        'created_at' => $_POST['created_at'],
-                        'year' => $_POST['year'],
-                        'mileage' => $_POST['mileage'],
-                        'energy' => $_POST['energy'],
-                        'price' => $_POST['price'],
-                        'transmission' => $_POST['transmission'],
-                        'color' => $_POST['color'],
-                        'door_number' => $_POST['door_number'],
-                        'fiscal_power' => $_POST['fiscal_power'],
-                        'interior_equipments' => $_POST['interior_equipments'],
-                        'exterior_equipments' => $_POST['exterior_equipments'],
-                        'security_equipments' => $_POST['security_equipments'],
-                        'others_equipments' => $_POST['others_equipments'],
-                        'picture' => $_POST['picture']
+                    $planning = [
+                        'jour1' => $_POST['jour1'],
+                        'hour1' => $_POST['hour1'],
+                        'jour2' => $_POST['jour2'],
+                        'hour2' => $_POST['hour2'],
+                        'jour3' => $_POST['jour3'],
+                        'hour3' => $_POST['hour3'],
+                        'jour4' => $_POST['jour4'],
+                        'hour4' => $_POST['hour4'],
+                        'jour5' => $_POST['jour5'],
+                        'hour5' => $_POST['hour5'],
+                        'jour6' => $_POST['jour6'],
+                        'hour6' => $_POST['hour6'],
+                        'jour7' => $_POST['jour7'],
+                        'hour7' => $_POST['hour7']
                     ];
     
                     // Appel au repository pour ajouter la mission
-                    $carRepository = new CarRepository();
-                    $success = $carRepository->addCar($car);
+                    $planningRepository = new planningRepository();
+                    $success = $planningRepository->addPlanning($planning);
     
                     if ($success) {
                         // Redirection après succès
-                        header('Location: /car/list');
+                        header('Location: /planning/list');
                         exit();
                     } else {
                         // Gérer l'erreur d'ajout de mission dans le repository
                         $this->render('errors/default', [
-                            'error' => "Echec pour ajouter un véhicule dans le repository."
+                            'error' => "Echec pour ajouter un planning dans le repository."
                         ]);
                     }
                 } else {
                     // Gérer les erreurs de données manquantes
-                    $this->render('car/add', [
+                    $this->render('planning/add', [
                         'error' => 'Il manque des informations: ' . implode(', ', $missingFields)
                     ]);
                 }
             } else {
                 // Afficher le formulaire d'ajout de mission
-                $this->render('car/add');
+                $this->render('planning/add');
             }
         } catch (\Exception $e) {
             // Gérer les erreurs génériques
@@ -161,17 +159,17 @@ class CarController extends Controller
         try {
             if (isset($_GET['id'])) {
                 $id = (int)$_GET['id'];
-                // Charger la voiture par un appel au repository
-                $carRepository = new CarRepository();
-                $car = $carRepository->findOneById($id);
+                // Charger la mission par un appel au repository
+                $planningRepository = new PlanningRepository();
+                $planning = $planningRepository->findOneById($id);
 
-                if ($car) {
-                    // Afficher le formulaire d'édition avec les données de la voiture
-                    $this->render('car/edit', [
-                        'car' => $car
+                if ($planning) {
+                    // Afficher le formulaire d'édition avec les données de la mission
+                    $this->render('planning/edit', [
+                        'planning' => $planning
                     ]);
                 } else {
-                    throw new \Exception("Véhicule non trouvée");
+                    throw new \Exception("Planning non trouvée");
                 }
             } else {
                 throw new \Exception("L'id est manquant");
@@ -191,11 +189,11 @@ class CarController extends Controller
             if (isset($_GET['id'])) {
                 $id = (int)$_GET['id'];
 
-                $carRepository = new CarRepository();
-                $success = $carRepository->deleteCar($id);
+                $planningRepository = new PlanningRepository();
+                $success = $planningRepository->deletePlanning($id);
 
                 if ($success) {
-                    // Rediriger vers la liste des véhicules après la suppression réussie
+                    // Rediriger vers la liste des missions après la suppression réussie
                     header("Location: /index.php");
                     exit;
                 } else {

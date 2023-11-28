@@ -2,23 +2,15 @@
 
 namespace App\Controller;
 
-use App\Repository\CarRepository;
+use App\Repository\OpinionRepository;
 
-class CarController extends Controller
+class OpinionController extends Controller
 {
     public function route(): void
     {
         try{
             if (isset ($_GET['action'])){
                 switch ($_GET['action']) {
-                    case 'show': 
-                        // appeler méthode show() 
-                        $this->show();
-                        break;
-                    case 'list': 
-                        // appeler méthode list()
-                        $this->list();
-                        break;
                     case 'edit': 
                         // appeler méthode edit()
                         $this->edit();
@@ -43,49 +35,6 @@ class CarController extends Controller
                 'error' => $e->getMessage()
             ]);
         }
-
-        
-    }
-
-    protected function show()
-    {
-        try{
-            if (isset($_GET['id'])) {
-
-                $id = (int)$_GET['id'];
-                $carRepository = new carRepository();
-                $car = $carRepository->findOneById($id);
-
-
-                $this->render('car/show', [
-                    'car' => $car
-                ]);
-            } else {
-                throw new \Exception("L'id est manquant");
-            }
-        } catch(\Exception $e) {
-            $this->render('errors/default', [
-                'error' => $e->getMessage()
-            ]);
-        }  
-    }
-
-    protected function list()
-    {
-        try{
-            $carRepository = new carRepository();
-            $car = $carRepository->findAll();
-
-
-            $this->render('car/list', [
-                'car' => $car
-            ]);
-            
-        } catch(\Exception $e) {
-            $this->render('errors/default', [
-                'error' => $e->getMessage()
-            ]);
-        }  
     }
 
     protected function add()
@@ -93,7 +42,7 @@ class CarController extends Controller
         try {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Vérification des données POST
-                $requiredFields = ['brand', 'model', 'description', 'created_at', 'year', 'mileage', 'energy', 'price', 'transmission', 'color', 'door_number', 'fiscal_power', 'interior_equipments', 'exterior_equipments', 'security_equipments', 'others_equipments', 'picture'];
+                $requiredFields = ['client_name', 'opinion', 'note'];
     
                 $missingFields = [];
                 foreach ($requiredFields as $field) {
@@ -104,49 +53,35 @@ class CarController extends Controller
     
                 if (empty($missingFields)) {
                     // Récupération des données du formulaire POST
-                    $car = [
-                        'brand' => $_POST['brand'],
-                        'model' => $_POST['model'],
-                        'description' => $_POST['description'],
-                        'created_at' => $_POST['created_at'],
-                        'year' => $_POST['year'],
-                        'mileage' => $_POST['mileage'],
-                        'energy' => $_POST['energy'],
-                        'price' => $_POST['price'],
-                        'transmission' => $_POST['transmission'],
-                        'color' => $_POST['color'],
-                        'door_number' => $_POST['door_number'],
-                        'fiscal_power' => $_POST['fiscal_power'],
-                        'interior_equipments' => $_POST['interior_equipments'],
-                        'exterior_equipments' => $_POST['exterior_equipments'],
-                        'security_equipments' => $_POST['security_equipments'],
-                        'others_equipments' => $_POST['others_equipments'],
-                        'picture' => $_POST['picture']
+                    $opinion = [
+                        'client_name' => $_POST['client_name'],
+                        'opinion' => $_POST['opinion'],
+                        'note' => $_POST['note']
                     ];
     
                     // Appel au repository pour ajouter la mission
-                    $carRepository = new CarRepository();
-                    $success = $carRepository->addCar($car);
+                    $opinionRepository = new OpinionRepository();
+                    $success = $opinionRepository->addOpinion($opinion);
     
                     if ($success) {
                         // Redirection après succès
-                        header('Location: /car/list');
+                        header('Location: /opinion/list');
                         exit();
                     } else {
                         // Gérer l'erreur d'ajout de mission dans le repository
                         $this->render('errors/default', [
-                            'error' => "Echec pour ajouter un véhicule dans le repository."
+                            'error' => "Echec pour ajouter un témoignage dans le repository."
                         ]);
                     }
                 } else {
                     // Gérer les erreurs de données manquantes
-                    $this->render('car/add', [
+                    $this->render('opinion/add', [
                         'error' => 'Il manque des informations: ' . implode(', ', $missingFields)
                     ]);
                 }
             } else {
                 // Afficher le formulaire d'ajout de mission
-                $this->render('car/add');
+                $this->render('opinion/add');
             }
         } catch (\Exception $e) {
             // Gérer les erreurs génériques
@@ -161,17 +96,17 @@ class CarController extends Controller
         try {
             if (isset($_GET['id'])) {
                 $id = (int)$_GET['id'];
-                // Charger la voiture par un appel au repository
-                $carRepository = new CarRepository();
-                $car = $carRepository->findOneById($id);
+                // Charger la mission par un appel au repository
+                $opinionRepository = new OpinionRepository();
+                $opinion = $opinionRepository->findOneById($id);
 
-                if ($car) {
-                    // Afficher le formulaire d'édition avec les données de la voiture
-                    $this->render('car/edit', [
-                        'car' => $car
+                if ($opinion) {
+                    // Afficher le formulaire d'édition avec les données de la mission
+                    $this->render('opinion/edit', [
+                        'opinion' => $opinion
                     ]);
                 } else {
-                    throw new \Exception("Véhicule non trouvée");
+                    throw new \Exception("Témoignage non trouvée");
                 }
             } else {
                 throw new \Exception("L'id est manquant");
@@ -191,11 +126,11 @@ class CarController extends Controller
             if (isset($_GET['id'])) {
                 $id = (int)$_GET['id'];
 
-                $carRepository = new CarRepository();
-                $success = $carRepository->deleteCar($id);
+                $opinionRepository = new OpinionRepository();
+                $success = $opinionRepository->deleteOpinion($id);
 
                 if ($success) {
-                    // Rediriger vers la liste des véhicules après la suppression réussie
+                    // Rediriger vers la liste des missions après la suppression réussie
                     header("Location: /index.php");
                     exit;
                 } else {

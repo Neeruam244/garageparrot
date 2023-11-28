@@ -15,11 +15,11 @@
             </div>
         </div>
         <p class="mentionlegale">
-            <a href="seconnecter.php">| Login |</a>
-            <a href="mentionlegal.php">Mentions légales |</a>
+            <a href="index.php?controller=user&action=connexion">| Login |</a>
+            <a href="index.php?controller=page&action=mentionlegal">Mentions légales |</a>
         </p>
     </footer>
-    <script src="/assets/JavaScript/slideavis.js"></script>
-    <script src="/assets/JavaScript/Slidecars.js"></script>
+    <script src="/assets/js/slideavis.js"></script>
+    <script src="/assets/js/slidecars.js"></script>
 </body>
 </html>

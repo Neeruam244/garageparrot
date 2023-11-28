@@ -50,7 +50,7 @@ class CarRepository {
         $pdo = $mysql->getPDO();
 
         $query = $pdo->prepare('INSERT INTO cars (brand, model, description, created_at, year, mileage, energy, price, transmission, color, door_number, fiscal_power, interior_equipments, exterior_equipments, security_equipments, others_equipments, picture) 
-            VALUES (:brand, :model, :description, :created_at, :year, :mileage, :energy, :rice, :transmission, :color, :door_number, :fiscal_power, :interior_equipments, :xterior_equipments, :security_equipments, :others_equipments, :picture)');
+            VALUES (:brand, :model, :description, :created_at, :year, :mileage, :energy, :price, :transmission, :color, :door_number, :fiscal_power, :interior_equipments, :exterior_equipments, :security_equipments, :others_equipments, :picture)');
 
         $query->bindValue(':brand', $car['brand']);
         $query->bindValue(':model', $car['model']);
@@ -80,7 +80,7 @@ class CarRepository {
         $pdo = $mysql->getPDO();
 
         $query = $pdo->prepare('UPDATE cars SET brand = :brand, model = :model, description = :description, created_at = :created_at, year = :year, mileage = :mileage 
-        energy = :energy, price = :price, transmission = :transmission, color = :color, door_number = :door_number, fiscal_power, interior_equipments = :interior_equipments, 
+        energy = :energy, price = :price, transmission = :transmission, color = :color, door_number = :door_number, fiscal_power = :fiscal_power, interior_equipments = :interior_equipments, 
         exterior_equipments = :exterior_equipments, security_equipments = :security_equipments, others_equipments = :others_equipments, picture = :picture WHERE id_car = :id_car');
 
         $query->bindValue(':id_car', $id_car, $pdo::PARAM_INT);

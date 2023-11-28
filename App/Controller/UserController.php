@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Repository\CarRepository;
+use App\Repository\UserRepository;
 
-class CarController extends Controller
+class UserController extends Controller
 {
     public function route(): void
     {
@@ -31,6 +31,10 @@ class CarController extends Controller
                         // appeler méthode delete()
                         $this->delete();
                         break;
+                    case 'connexion': 
+                        // appeler méthode connexion()
+                        $this->connexion();
+                        break;
                     default : 
                         throw new \Exception("Cette action n'existe pas : ".$_GET['action']);
                         break;
@@ -53,12 +57,13 @@ class CarController extends Controller
             if (isset($_GET['id'])) {
 
                 $id = (int)$_GET['id'];
-                $carRepository = new carRepository();
-                $car = $carRepository->findOneById($id);
+                // Charger la mission par un appel au repository
+                $userRepository = new userRepository();
+                $user = $userRepository->findOneById($id);
 
 
-                $this->render('car/show', [
-                    'car' => $car
+                $this->render('user/show', [
+                    'user' => $user
                 ]);
             } else {
                 throw new \Exception("L'id est manquant");
@@ -73,12 +78,12 @@ class CarController extends Controller
     protected function list()
     {
         try{
-            $carRepository = new carRepository();
-            $car = $carRepository->findAll();
+            $userRepository = new userRepository();
+            $user = $userRepository->findAll();
 
 
-            $this->render('car/list', [
-                'car' => $car
+            $this->render('user/list', [
+                'user' => $user
             ]);
             
         } catch(\Exception $e) {
@@ -93,7 +98,7 @@ class CarController extends Controller
         try {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Vérification des données POST
-                $requiredFields = ['brand', 'model', 'description', 'created_at', 'year', 'mileage', 'energy', 'price', 'transmission', 'color', 'door_number', 'fiscal_power', 'interior_equipments', 'exterior_equipments', 'security_equipments', 'others_equipments', 'picture'];
+                $requiredFields = ['first_name', 'last_name', 'email', 'password', 'role'];
     
                 $missingFields = [];
                 foreach ($requiredFields as $field) {
@@ -104,49 +109,37 @@ class CarController extends Controller
     
                 if (empty($missingFields)) {
                     // Récupération des données du formulaire POST
-                    $car = [
-                        'brand' => $_POST['brand'],
-                        'model' => $_POST['model'],
-                        'description' => $_POST['description'],
-                        'created_at' => $_POST['created_at'],
-                        'year' => $_POST['year'],
-                        'mileage' => $_POST['mileage'],
-                        'energy' => $_POST['energy'],
-                        'price' => $_POST['price'],
-                        'transmission' => $_POST['transmission'],
-                        'color' => $_POST['color'],
-                        'door_number' => $_POST['door_number'],
-                        'fiscal_power' => $_POST['fiscal_power'],
-                        'interior_equipments' => $_POST['interior_equipments'],
-                        'exterior_equipments' => $_POST['exterior_equipments'],
-                        'security_equipments' => $_POST['security_equipments'],
-                        'others_equipments' => $_POST['others_equipments'],
-                        'picture' => $_POST['picture']
+                    $user = [
+                        'first_name' => $_POST['first_name'],
+                        'last_name' => $_POST['last_name'],
+                        'email' => $_POST['email'],
+                        'password' => $_POST['password'],
+                        'role' => $_POST['role']
                     ];
     
                     // Appel au repository pour ajouter la mission
-                    $carRepository = new CarRepository();
-                    $success = $carRepository->addCar($car);
+                    $userRepository = new userRepository();
+                    $success = $userRepository->addUser($user);
     
                     if ($success) {
                         // Redirection après succès
-                        header('Location: /car/list');
+                        header('Location: /user/list');
                         exit();
                     } else {
                         // Gérer l'erreur d'ajout de mission dans le repository
                         $this->render('errors/default', [
-                            'error' => "Echec pour ajouter un véhicule dans le repository."
+                            'error' => "Echec pour ajouter un employé dans le repository."
                         ]);
                     }
                 } else {
                     // Gérer les erreurs de données manquantes
-                    $this->render('car/add', [
+                    $this->render('user/add', [
                         'error' => 'Il manque des informations: ' . implode(', ', $missingFields)
                     ]);
                 }
             } else {
                 // Afficher le formulaire d'ajout de mission
-                $this->render('car/add');
+                $this->render('user/add');
             }
         } catch (\Exception $e) {
             // Gérer les erreurs génériques
@@ -161,17 +154,17 @@ class CarController extends Controller
         try {
             if (isset($_GET['id'])) {
                 $id = (int)$_GET['id'];
-                // Charger la voiture par un appel au repository
-                $carRepository = new CarRepository();
-                $car = $carRepository->findOneById($id);
+                // Charger la mission par un appel au repository
+                $userRepository = new userRepository();
+                $user = $userRepository->findOneById($id);
 
-                if ($car) {
-                    // Afficher le formulaire d'édition avec les données de la voiture
-                    $this->render('car/edit', [
-                        'car' => $car
+                if ($user) {
+                    // Afficher le formulaire d'édition avec les données de la mission
+                    $this->render('user/edit', [
+                        'user' => $user
                     ]);
                 } else {
-                    throw new \Exception("Véhicule non trouvée");
+                    throw new \Exception("Employé non trouvé");
                 }
             } else {
                 throw new \Exception("L'id est manquant");
@@ -191,11 +184,11 @@ class CarController extends Controller
             if (isset($_GET['id'])) {
                 $id = (int)$_GET['id'];
 
-                $carRepository = new CarRepository();
-                $success = $carRepository->deleteCar($id);
+                $userRepository = new userRepository();
+                $success = $userRepository->deleteUser($id);
 
                 if ($success) {
-                    // Rediriger vers la liste des véhicules après la suppression réussie
+                    // Rediriger vers la liste des missions après la suppression réussie
                     header("Location: /index.php");
                     exit;
                 } else {
@@ -216,5 +209,69 @@ class CarController extends Controller
         } 
     }
 
+    protected function connexion ()
+    {
+        try {
+            $userRepository = new userRepository();
+            $user = $userRepository->connexionTo();
+
+            $this->render('user/connexion', [
+                'user' => $user
+            ]);
+
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $email = $_POST['email'];
+            $password = $_POST['password'];
+
+            // Récupérer les données du formulaire
+                $inputEmail = $_POST["email"];
+                $inputPassword = $_POST["password"];
+  
+            // Vérifier les informations d'identification
+                if ($inputemail === $email && $inputPassword === $password) {  
+                    
+                    $userRole = "admin"; // Peut être "admin" ou "utilisateur"      
+                    
+                    // Redirection en fonction du rôle de l'utilisateur
+                    if ($userRole === "admin") {
+                        header("Location: page_admin.php");
+                        exit();
+                    }        
+                    elseif ($userRole === "employé") {
+                        header("Location: page_employé.php");
+                        exit();
+                    } 
+            }
+
+
+       
+
+
+                if ($user) {
+                session_regenerate_id(true);
+                $_SESSION['user'] = $user;
+                    if ($user['role'] === 'administrateur') {
+                        header('location: templates/user/admin/list.php');
+                        exit;
+                    } elseif
+                        ($user['role'] === 'employé') {
+                        header('location: templates/user/employé/list.php');
+                        exit;
+                    } else {
+                        header("Location: index.php?erreur=1");
+                        echo "Redirection échoué";
+                        exit;
+                    }
+                }
+
+            }
+        }    
+            catch(\Exception $e) {
+            $this->render('errors/default', [
+                'error' => $e->getMessage()
+            ]);
+        }  
+        
+    }
 }
 

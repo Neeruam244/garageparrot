@@ -21,7 +21,9 @@ class Car {
     protected string $security_equipments;
     protected string $others_equipments;
     protected ?string $picture = null;
+    protected ?string $picture1 = null;
 
+    
     
 
     /**
@@ -344,6 +346,24 @@ class Car {
     public function setPicture(?string $picture): self
     {
         $this->picture = $picture;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of picture1
+     */
+    public function getPicture1(): ?string
+    {
+        return $this->picture1;
+    }
+
+    /**
+     * Set the value of picture1
+     */
+    public function setPicture1(?string $picture1): self
+    {
+        $this->picture1 = $picture1;
 
         return $this;
     }
