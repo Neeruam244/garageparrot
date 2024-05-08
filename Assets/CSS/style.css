@@ -173,7 +173,7 @@ footer{
 
 /*  --- MENTIONS LEGALES--- */
 .title-ml{
-    margin-top: 100px;
+    margin-top: 50px;
     font-family: 'Acme', sans-serif;
     font-size: 30px;
     text-align: center;
@@ -190,7 +190,7 @@ footer{
 }
 @media screen and (min-width: 768px){
     .title-ml{
-        margin-top: 200px;
+        margin-top: 50px;
         font-family: 'Acme', sans-serif;
         font-size: 40px;
         margin-left: 300px;
@@ -213,7 +213,7 @@ footer{
     width: 300px;
     border-radius: 0.75rem;
     background-color: #ffb700;
-    margin: 100px auto 100px auto;
+    margin: 50px auto 50px auto;
     padding: 20px;
     color: rgba(243, 244, 246, 1);
 } 
@@ -278,7 +278,7 @@ footer{
         width: 320px;
         border-radius: 0.75rem;
         background-color: #ffb700;
-        margin: 200px auto 50px auto;
+        margin: 50px auto 50px auto;
         padding: 30px;
         color: rgba(243, 244, 246, 1);
     } 
@@ -351,11 +351,7 @@ footer{
 .photos-services{
     width: 250px;
     height: 150px;
-    margin: 50px;
-    margin-left: 50px;
 }
-
-
 @media screen and (min-width: 768px){
     .title-service{
         padding-top: 30px;
@@ -420,9 +416,38 @@ footer{
         height: 300px;
         float: right; 
         clear: right;
+        margin-right: 10px;
     }
-    .contain_service{
-        margin: 20px;
+    .section-servicess{
+        margin-bottom: 90px;
+    }
+    .contain-services{
+        margin-bottom: 50px;
+    }
+    .title-servicess{
+        padding-top: 30px;
+        font-family: 'Acme', sans-serif;
+        font-size: 40px;
+        margin-left: 100px;
+        margin-bottom: 20px;
+        text-align: left;
+    }
+    .h2titles{
+        font-family: 'Acme', sans-serif;
+        font-size: 30px;
+        text-align: left;
+        margin-left: 150px;
+    }
+    .photos-servicess{
+        width: 400px;
+        height: 250px;
+        float: right; 
+        clear: right;
+        margin: 10px 50px 10px 50px;
+    }
+    .para-servicess{
+        font-size: 18px;
+        margin: 20px 20px 100px 100px;
     }
 }
 
@@ -507,12 +532,10 @@ footer{
     background: #fcfcf7;
 }
 .title-contact{
-    padding-top: 100px;
     margin: 20px;
     font-family: 'Acme', sans-serif;
     font-size: 25px;
     text-align: center;
-    
 }
 .para-contact1{
     margin-left: 20px;
@@ -736,7 +759,7 @@ footer{
     position: relative;
     background: #dee2e6;
 }
-.mySlides {
+.Slides {
     display: none;
     padding-top: 50px;
     padding-bottom: 10px;
@@ -748,21 +771,17 @@ footer{
     top: 50%;
     width: auto;
     margin-top: -30px;
-    padding: 16px;
+    padding: 40px;
     color: #21211f;
     font-weight: bold;
-    font-size: 20px;
-    border-radius: 0 3px 3px 0;
+    font-size: 15px;
+    border-radius: 0 5px 5px 0;
     user-select: none;
 }
 .next {
     position: absolute;
     right: 0;
-    border-radius: 3px 0 0 3px;
-}
-.prev:hover, .next:hover {
-    background-color: rgba(0,0,0,0.8);
-    color: white;
+    border-radius: 5px 0 0 5px;
 }
 .dot-container {
     text-align: center;
@@ -907,6 +926,8 @@ q {
         font-family: 'Acme', sans-serif;
         font-size: 30px;
         text-align: center;
+        color : #ffb700;
+        border: black;
     }
     .rating {
         display: flex;
@@ -956,17 +977,34 @@ q {
     text-align: center;
 }
 .filter{
-    margin:10px;
+    margin:30px;
 }
 .type-filter{
     display: block;
 }
 .title-filter{
-    text-transform: uppercase;
     font-size: 15px;
 }
 select{
     margin: 10px;
+}
+.ui-slider-horizontal .ui-slider-range {
+    top: 0;
+    height: 100%;
+}
+.ui-slider .ui-slider-range {
+    position: absolute;
+    z-index: 1;
+    font-size: .7em;
+    display: block;
+    border: 0;
+    background-position: 0 0;
+}
+.formfiltre{
+    display: inline-block;
+}
+.btnfiltre{
+    margin-left: 150px;
 }
 .wrapper {
     display: inline-block;
@@ -1063,7 +1101,6 @@ select{
     border-color: #ffb700;
     transition: all .3s ease;  
 }
-
 @media screen and (min-width: 768px){
     .title-car{
         margin-top: 170px;
@@ -1082,7 +1119,35 @@ select{
         text-align: left;
     }
     .filter{
-        margin: 30px 20px 20px 100px;
+        margin:30px 20px 20px 150px;
+    }
+    .type-filter{
+        display: block;
+    }
+    .title-filter{
+        font-size: 15px;
+    }
+    select{
+        margin: 10px;
+    }
+    .ui-slider-horizontal .ui-slider-range {
+        top: 0;
+        height: 100%;
+    }
+    .ui-slider .ui-slider-range {
+        position: absolute;
+        z-index: 1;
+        font-size: .7em;
+        display: block;
+        border: 0;
+        background-position: 0 0;
+    }
+    .formfiltre{
+        display: inline-block;
+    }
+    .btnfiltre{
+        margin-left: 300px;
+        margin-top: 20px;
     }
     .type-filter{
         display: inline-block;
@@ -1192,7 +1257,6 @@ select{
 
 /*  --- PAGE DETAILS DES VEHICULES ---  */
 .title-model{
-    margin-top: 100px;
     margin-bottom: 0;
     font-family: 'Acme', sans-serif;
     font-size: 35px;
@@ -1328,13 +1392,14 @@ td{
 }
 .pourcontact a{
     font-family: 'Acme', sans-serif;
+    text-align: center;
     text-decoration: none;
     color: #21211f;
 }
 @media screen and (min-width: 768px){
     .title-model{
         font-family: 'Acme', sans-serif;
-        margin: 200px 0 0 0;
+        margin: 50px 0 0 0;
         text-align: center;
     }
     .subtitle-model {
@@ -1367,14 +1432,18 @@ td{
     .droite{
         margin-left: 200px;
         margin-right:50px;
+        margin-top: 20px;
+        margin-bottom : 20px;
     }
     .gauche{
         margin-left: 150px;
+        margin-top: 20px;
+        margin-bottom : 20px;
     }
     .slide-container {
         max-width: 800px;
         position: relative;
-        margin: 200px 50px 0 50px;
+        margin: 20px 50px 0 50px;
     }
     .slide-img{ 
         width: 500px; 
@@ -1416,12 +1485,13 @@ td{
         text-align : center;
     }
     .pourcontact{
-        text-align: center;
         font-size: 40px;
+        text-align:center;
     }
     .pourcontact a{
         font-family: 'Acme', sans-serif;
         text-decoration: none;
+        text-align:center;
         color: #21211f;
     } 
 }

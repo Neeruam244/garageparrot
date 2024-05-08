@@ -104,48 +104,80 @@ class UserRepository
         }
 
     }
-
-    public function connexionTo ()
+    
+    public function connexionTo()
+    {   
+        try {
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $email = $_POST['email'];
+                $password = $_POST['password'];
+    
+                $password_hash = password_hash($password, PASSWORD_DEFAULT);
+    
+                // Vérifier les informations d'identification (remplacez cette logique par votre propre vérification)
+            if ($this->ControlConnexion($email, $password_hash)) {
+                $userRole = $this->RoleUser($email); // Obtenez le rôle de l'utilisateur à partir de votre système
+    
+                // Redirection en fonction du rôle de l'utilisateur
+                if ($userRole === "administrateur") {
+                    header("Location: admin.php");
+                    exit();
+                } elseif ($userRole === "employé") {
+                    header("Location: employe.php");
+                    exit();
+                } else {
+                    // Rôle non reconnu, rediriger vers une page d'erreur ou afficher un message
+                    echo "Rôle non reconnu";
+                }
+            } else {
+                echo "Email ou mot de passe incorrect";
+            }
+            } 
+        } catch(\Exception $e) {
+                // Gérer l'erreur, par exemple, journaliser l'erreur
+                // Vous pouvez également relancer l'exception pour que le contrôleur puisse la capturer
+                throw $e; // Laissez le contrôleur décider de la façon de gérer cette exception
+        }
+        
+    }
+    
+    public function ControlConnexion ($email, $password)
     {
+        $password_hash = password_hash($password, PASSWORD_DEFAULT);
+
         //Appel BDD
         $mysql = Mysql::getInstance();
         $pdo = $mysql->getPDO();
 
-        $query = $pdo->prepare("SELECT * FROM user WHERE email = :email AND password = :password");
+        $query = $pdo->prepare("SELECT * FROM user WHERE email = :email");
         $query->bindParam(':email', $email, $pdo::PARAM_STR);
-        $query->bindParam(':password', $password, $pdo::PARAM_STR);
         $query->execute();
         $user = $query->fetch();
 
-        if ($user && password_verify($password, $user['password'])) {
-            return $user;
+        if ($user && password_verify($password, $user['password_hash'])) {
+            return true;
         } else {
             return false;
         }
     }
 
-    /*public function verifyUserLoginPassword(string $email, string $password)
+    public function RoleUser($email)
     {
+        //Appel BDD
+        $mysql = Mysql::getInstance();
+        $pdo = $mysql->getPDO();
 
-        try {
-            $mysql = Mysql::getInstance();
-            $pdo = $mysql->getPDO();
+        $query = $pdo->prepare("SELECT role FROM user WHERE email = :email");
+        $query->execute();
+        $user = $query->fetch();
 
-            $query = $pdo->prepare("SELECT * FROM user WHERE email = :email");
-            $query->bindParam(':email', $email, $pdo::PARAM_STR);
-
-            $query->execute();
-            $user = $query->fetch();
-
-            if ($user && password_verify($password, $user['password'])) {
-                return $user;
-            } else {
-                return false;
-            }
-        } catch (\Exception $e) {
-            // Gérer l'erreur, par exemple, journaliser l'erreur
-            // Vous pouvez également relancer l'exception pour que le contrôleur puisse la capturer
-            throw $e; // Laissez le contrôleur décider de la façon de gérer cette exception
+        if ($user) {
+            // Renvoyer le rôle de l'utilisateur trouvé dans la base de données
+            return $user['role'];
+        } else {
+            // Gérer le cas où l'utilisateur n'existe pas ou n'a pas de rôle défini
+            return "utilisateur"; // Par défaut, on considère l'utilisateur comme un utilisateur standard
         }
-    }*/
+    }
+
 }

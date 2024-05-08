@@ -57,7 +57,7 @@ class UserController extends Controller
             if (isset($_GET['id'])) {
 
                 $id = (int)$_GET['id'];
-                // Charger la mission par un appel au repository
+                
                 $userRepository = new userRepository();
                 $user = $userRepository->findOneById($id);
 
@@ -209,69 +209,20 @@ class UserController extends Controller
         } 
     }
 
-    protected function connexion ()
+    protected function connexion()
     {
         try {
-            $userRepository = new userRepository();
-            $user = $userRepository->connexionTo();
+                $userRepository = new userRepository();
+                $user = $userRepository->connexionTo();
 
-            $this->render('user/connexion', [
-                'user' => $user
-            ]);
-
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $email = $_POST['email'];
-            $password = $_POST['password'];
-
-            // Récupérer les données du formulaire
-                $inputEmail = $_POST["email"];
-                $inputPassword = $_POST["password"];
-  
-            // Vérifier les informations d'identification
-                if ($inputemail === $email && $inputPassword === $password) {  
-                    
-                    $userRole = "admin"; // Peut être "admin" ou "utilisateur"      
-                    
-                    // Redirection en fonction du rôle de l'utilisateur
-                    if ($userRole === "admin") {
-                        header("Location: page_admin.php");
-                        exit();
-                    }        
-                    elseif ($userRole === "employé") {
-                        header("Location: page_employé.php");
-                        exit();
-                    } 
+                $this->render('user/admin', [
+                    'user' => $user
+                ]);
+                
+            } catch(\Exception $e) {
+                $this->render('errors/default', [
+                    'error' => $e->getMessage()
+                ]);
             }
-
-
-       
-
-
-                if ($user) {
-                session_regenerate_id(true);
-                $_SESSION['user'] = $user;
-                    if ($user['role'] === 'administrateur') {
-                        header('location: templates/user/admin/list.php');
-                        exit;
-                    } elseif
-                        ($user['role'] === 'employé') {
-                        header('location: templates/user/employé/list.php');
-                        exit;
-                    } else {
-                        header("Location: index.php?erreur=1");
-                        echo "Redirection échoué";
-                        exit;
-                    }
-                }
-
-            }
-        }    
-            catch(\Exception $e) {
-            $this->render('errors/default', [
-                'error' => $e->getMessage()
-            ]);
-        }  
-        
     }
 }
-

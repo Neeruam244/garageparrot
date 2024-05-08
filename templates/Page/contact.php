@@ -1,6 +1,6 @@
 <?php  require_once _ROOTPATH_.'\templates\header.php'; ?>
 
-<h2 class="title-contact">Besoin d'un renseignements?</h2>
+<h2 class="title-contact mt-5">Besoin d'un renseignements?</h2>
         <p class="para-contact1">Afin de mieux vous renseigner, merci de remplir le formulaire ci dessous</p>
 
         <aside>

@@ -5,34 +5,14 @@
                     <h2 class="title-model"><?= $car->getBrand()?> <?= $car->getModel()?></h2>
                     <p class="subtitle-model"><?= $car->getDescription()?></p>
 
-                    <p class="infos-car"><?=$car->getYear()?>| <?= $car->getMileage()?> | <?= $car->getEnergy()?></p>
-                    <p class="price-car"><?= $car->getPrice()?></p>
+                    <p class="infos-car"><?=$car->getYear()?> | <?= $car->getMileage()?> km | <?= $car->getEnergy()?></p>
+                    <p class="price-car"><?= $car->getPrice()?> €</p>
                 </div>
 
                 <div class="droite">
                     <div class="slide-container">
                         <div class="custom-slider fade" style="text-align: center;">
                           <img class="slide-img" src="<?= $car->getPicture1()?>">
-                        </div>
-
-                        <div class="custom-slider fade" style="text-align: center;">
-                          <img class="slide-img" src="Photos/véhicules d'occasions/clio4/clio3.jpg">
-                        </div>
-
-                        <div class="custom-slider fade" style="text-align: center;">
-                          <img class="slide-img" src="Photos/véhicules d'occasions/clio4/clio4.jpg">
-                        </div>
-
-                        <div class="custom-slider fade" style="text-align: center;">
-                            <img class="slide-img" src="Photos/véhicules d'occasions/clio4/clio5.jpg">
-                        </div>
-
-                        <div class="custom-slider fade" style="text-align: center;">
-                            <img class="slide-img" src="Photos/véhicules d'occasions/clio4/clio2.jpg">
-                        </div>
-
-                        <div class="custom-slider fade" style="text-align: center;">
-                            <img class="slide-img" src="Photos/véhicules d'occasions/clio4/clio6.jpg">
                         </div>
 
                         <div>

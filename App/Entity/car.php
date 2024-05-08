@@ -9,9 +9,9 @@ class Car {
     protected string $description;
     protected string $created_at;
     protected int $year;
-    protected string $mileage;
+    protected int $mileage;
     protected string $energy;
-    protected string $price;
+    protected int $price;
     protected string $transmission;
     protected string $color;
     protected int $door_number;
@@ -23,8 +23,7 @@ class Car {
     protected ?string $picture = null;
     protected ?string $picture1 = null;
 
-    
-    
+
 
     /**
      * Get the value of id_car
@@ -137,7 +136,7 @@ class Car {
     /**
      * Get the value of mileage
      */
-    public function getMileage(): string
+    public function getMileage(): int
     {
         return $this->mileage;
     }
@@ -145,7 +144,7 @@ class Car {
     /**
      * Set the value of mileage
      */
-    public function setMileage(string $mileage): self
+    public function setMileage(int $mileage): self
     {
         $this->mileage = $mileage;
 
@@ -173,7 +172,7 @@ class Car {
     /**
      * Get the value of price
      */
-    public function getPrice(): string
+    public function getPrice(): int
     {
         return $this->price;
     }
@@ -181,7 +180,7 @@ class Car {
     /**
      * Set the value of price
      */
-    public function setPrice(string $price): self
+    public function setPrice(int $price): self
     {
         $this->price = $price;
 

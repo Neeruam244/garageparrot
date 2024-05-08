@@ -1,4 +1,9 @@
-<?php  require_once _ROOTPATH_.'\templates\header.php'; ?>
+<?php
+
+use App\Entity\user;
+use App\Repository\UserRepository;
+
+  require_once _ROOTPATH_.'\templates\header.php'; ?>
 
 
 <div class="form-container">
@@ -18,7 +23,7 @@
                 </div>
             </div>
 
-            <input class="sign" type="submit" value="seConnecter" name="loginUser" target="_blanck">
+            <input class="sign" type="submit" value="se Connecter" name="loginUser" target="_blanck">
         </form>
 </div>
 

@@ -8,10 +8,11 @@ class user
     protected string $last_name;
     protected string $first_name;
     protected string $email;
-    protected string $password;
+    protected string $password_hash;
     protected string $role;
 
-    
+
+
 
     /**
      * Get the value of id_user
@@ -86,19 +87,19 @@ class user
     }
 
     /**
-     * Get the value of password
+     * Get the value of password_hash
      */
-    public function getPassword(): string
+    public function getPasswordHash(): string
     {
-        return $this->password;
+        return $this->password_hash;
     }
 
     /**
-     * Set the value of password
+     * Set the value of password_hash
      */
-    public function setPassword(string $password): self
+    public function setPasswordHash(string $password_hash): self
     {
-        $this->password = $password;
+        $this->password_hash = $password_hash;
 
         return $this;
     }

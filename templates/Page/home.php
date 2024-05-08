@@ -120,7 +120,7 @@
                 </div>
 
                 <div class="mySlides">
-                    <q>Super acceuil ! Professionnels sérieux et dynamiques. Le prix des prestations sont correts et les devis sont transmis avant chaque réparation pour ne pas avoir de surpise ! Très bonne équipe !</q>  
+                    <q>Super accueil ! Professionnels sérieux et dynamiques. Le prix des prestations sont correts et les devis sont transmis avant chaque réparation pour ne pas avoir de surpise ! Très bonne équipe !</q>  
                     <p class="author">Nicolas COUDRINO <img src="uploads/etoiles_avis/5stars.png" width="120px" height="20px" class="stars"></p>
                 </div>
 
@@ -143,7 +143,9 @@
                 <span class="dot" onclick="currentSlide(5)"></span>
                 <span class="dot" onclick="currentSlide(6)"></span>
             </div>
-        </div>    
+        </div>   
+        
+        
 
         <p class="para-avis">Votre passage chez nous s'est bien passé. <br> Laisser nous votre avis ! </p>
 

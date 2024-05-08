@@ -19,7 +19,7 @@
             <a href="index.php?controller=page&action=mentionlegal">Mentions légales |</a>
         </p>
     </footer>
-    <script src="/assets/js/slideavis.js"></script>
-    <script src="/assets/js/slidecars.js"></script>
+    <script src="/Assets/JavaScript/slideavis.js"></script>
+    <script src="/Assets/JavaScript/slidecars.js"></script>
 </body>
 </html>
