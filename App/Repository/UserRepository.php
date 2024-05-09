@@ -92,15 +92,12 @@ class UserRepository
             $success = $query->execute();
 
             if (!$success) {
-                // Gérer l'échec de la suppression (peut-être en lançant une exception)
                 throw new \Exception("Impossible de supprimer la personne");
             }
 
-            return true; // La suppression a réussi
+            return true; 
         } catch (\Exception $e) {
-            // Gérer l'erreur, par exemple, journaliser l'erreur
-            // Vous pouvez également relancer l'exception pour que le contrôleur puisse la capturer
-            throw $e; // Laissez le contrôleur décider de la façon de gérer cette exception
+            throw $e; 
         }
 
     }
@@ -108,16 +105,17 @@ class UserRepository
     public function connexionTo()
     {   
         try {
+           
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $email = $_POST['email'];
                 $password = $_POST['password'];
-    
-                $password_hash = password_hash($password, PASSWORD_DEFAULT);
-    
-                // Vérifier les informations d'identification (remplacez cette logique par votre propre vérification)
-            if ($this->ControlConnexion($email, $password_hash)) {
-                $userRole = $this->RoleUser($email); // Obtenez le rôle de l'utilisateur à partir de votre système
-    
+
+                $password_hash = password_hash($password, PASSWORD_BCRYPT);
+                
+            if ($this->controlConnexion($email, $password)) {
+                $userRole = $this->RoleUser($email); 
+               
+
                 // Redirection en fonction du rôle de l'utilisateur
                 if ($userRole === "administrateur") {
                     header("Location: admin.php");
@@ -126,7 +124,6 @@ class UserRepository
                     header("Location: employe.php");
                     exit();
                 } else {
-                    // Rôle non reconnu, rediriger vers une page d'erreur ou afficher un message
                     echo "Rôle non reconnu";
                 }
             } else {
@@ -134,16 +131,15 @@ class UserRepository
             }
             } 
         } catch(\Exception $e) {
-                // Gérer l'erreur, par exemple, journaliser l'erreur
-                // Vous pouvez également relancer l'exception pour que le contrôleur puisse la capturer
-                throw $e; // Laissez le contrôleur décider de la façon de gérer cette exception
+                throw $e; 
         }
         
     }
     
-    public function ControlConnexion ($email, $password)
+    public function controlConnexion ($email, $password)
     {
-        $password_hash = password_hash($password, PASSWORD_DEFAULT);
+        
+        $password_hash = password_hash($password, PASSWORD_BCRYPT);
 
         //Appel BDD
         $mysql = Mysql::getInstance();
@@ -153,8 +149,10 @@ class UserRepository
         $query->bindParam(':email', $email, $pdo::PARAM_STR);
         $query->execute();
         $user = $query->fetch();
-
-        if ($user && password_verify($password, $user['password_hash'])) {
+  
+        // if ($user && password_verify($password, $user['password_hash'])) {
+        
+        if ($password === $user['password_hash']) {
             return true;
         } else {
             return false;
@@ -168,15 +166,14 @@ class UserRepository
         $pdo = $mysql->getPDO();
 
         $query = $pdo->prepare("SELECT role FROM user WHERE email = :email");
+        $query->bindParam(':email', $email, $pdo::PARAM_STR);
         $query->execute();
         $user = $query->fetch();
 
         if ($user) {
-            // Renvoyer le rôle de l'utilisateur trouvé dans la base de données
             return $user['role'];
         } else {
-            // Gérer le cas où l'utilisateur n'existe pas ou n'a pas de rôle défini
-            return "utilisateur"; // Par défaut, on considère l'utilisateur comme un utilisateur standard
+            return "utilisateur"; 
         }
     }
 

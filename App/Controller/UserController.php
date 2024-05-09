@@ -5,10 +5,13 @@ namespace App\Controller;
 use App\Repository\UserRepository;
 
 class UserController extends Controller
+
 {
     public function route(): void
     {
+        
         try{
+            
             if (isset ($_GET['action'])){
                 switch ($_GET['action']) {
                     case 'show': 
@@ -34,7 +37,7 @@ class UserController extends Controller
                     case 'connexion': 
                         // appeler méthode connexion()
                         $this->connexion();
-                        break;
+                        break; 
                     default : 
                         throw new \Exception("Cette action n'existe pas : ".$_GET['action']);
                         break;
@@ -50,6 +53,8 @@ class UserController extends Controller
 
         
     }
+
+    
 
     protected function show()
     {
@@ -212,14 +217,16 @@ class UserController extends Controller
     protected function connexion()
     {
         try {
+            
                 $userRepository = new userRepository();
                 $user = $userRepository->connexionTo();
-
+     
                 $this->render('user/admin', [
                     'user' => $user
                 ]);
                 
             } catch(\Exception $e) {
+                
                 $this->render('errors/default', [
                     'error' => $e->getMessage()
                 ]);

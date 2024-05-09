@@ -144,8 +144,6 @@
                 <span class="dot" onclick="currentSlide(6)"></span>
             </div>
         </div>   
-        
-        
 
         <p class="para-avis">Votre passage chez nous s'est bien passé. <br> Laisser nous votre avis ! </p>
 

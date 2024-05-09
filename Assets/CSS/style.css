@@ -757,12 +757,12 @@ footer{
 }
 .slideshow-container {
     position: relative;
-    background: #dee2e6;
+    background: green;
+    padding: 20px;
 }
-.Slides {
+.mySlides {
     display: none;
-    padding-top: 50px;
-    padding-bottom: 10px;
+    padding: 80px;
     text-align: center;
 }  
 .prev, .next {
@@ -785,8 +785,7 @@ footer{
 }
 .dot-container {
     text-align: center;
-    padding: 10px;
-    background: #dee2e6;
+    background: green;
 }
 .dot {
     cursor: pointer;
@@ -814,6 +813,8 @@ q {
     font-size: 20px;
     text-align: center;
 }
+
+
 .rating {
     display: flex;
     flex-direction: row-reverse;

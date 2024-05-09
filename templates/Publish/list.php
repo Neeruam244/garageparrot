@@ -31,7 +31,8 @@
             </div>
 
            
-        </div>    
+        </div> 
+ 
 
         <p class="para-avis">Votre passage chez nous s'est bien passé. <br> Laisser nous votre avis ! </p>
 
