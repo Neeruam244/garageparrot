@@ -29,6 +29,19 @@ class OpinionRepository {
         return $opinionEntity;
     }
 
+    public function findAll()
+    {
+        //Appel BDD
+        $mysql = Mysql::getInstance();
+        $pdo = $mysql->getPDO();
+        
+        $query = $pdo->prepare('SELECT * FROM opinion');
+        $query->execute();
+        $publish = $query->fetchAll($pdo::FETCH_ASSOC);
+
+        return $publish;
+    }
+
     
     public function AddOpinion(array $opinion)
     {
@@ -39,7 +52,7 @@ class OpinionRepository {
         $query = $pdo->prepare('INSERT INTO opinion (client_name, opinion, note) 
             VALUES (:client_name, :opinion, :note)');
 
-        $query->bindValue(':brand', $opinion['client_name']);
+        $query->bindValue(':client_name', $opinion['client_name']);
         $query->bindValue(':opinion', $opinion['opinion']);
         $query->bindValue(':note', $opinion['note']);
         

@@ -11,6 +11,10 @@ class OpinionController extends Controller
         try{
             if (isset ($_GET['action'])){
                 switch ($_GET['action']) {
+                    case 'list': 
+                        // appeler méthode list()
+                        $this->list();
+                        break;
                     case 'edit': 
                         // appeler méthode edit()
                         $this->edit();
@@ -36,6 +40,23 @@ class OpinionController extends Controller
             ]);
         }
     }
+
+    protected function list()
+    {
+        try{
+            $opinionRepository = new opinionRepository();
+            $opinion = $opinionRepository->findAll();
+
+            $this->render('opinion/list', [
+                'opinion' => $opinion
+            ]);
+            
+        } catch(\Exception $e) {
+            $this->render('errors/default', [
+                'error' => $e->getMessage()
+            ]);
+        }  
+    } 
 
     protected function add()
     {

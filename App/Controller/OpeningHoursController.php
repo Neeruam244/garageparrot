@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Repository\PlanningRepository;
+use App\Repository\OpeningHoursRepository;
 
-class PlanningController extends Controller
+class OpeningHoursController extends Controller
 {
     public function route(): void
     {
@@ -54,12 +54,12 @@ class PlanningController extends Controller
 
                 $id = (int)$_GET['id'];
                 // Charger la mission par un appel au repository
-                $planningRepository = new planningRepository();
-                $planning = $planningRepository->findOneById($id);
+                $OpeningHoursRepository = new OpeningHoursRepository();
+                $openinghours = $OpeningHoursRepository->findOneById($id);
 
 
-                $this->render('planningr/show', [
-                    'planning' => $planning
+                $this->render('openinghours/show', [
+                    'openinghours' => $openinghours
                 ]);
             } else {
                 throw new \Exception("L'id est manquant");
@@ -74,12 +74,12 @@ class PlanningController extends Controller
     protected function list()
     {
         try{
-            $planningRepository = new planningRepository();
-            $planning = $planningRepository->findAll();
+            $OpeningHoursRepository = new OpeningHoursRepository();
+            $openinghours = $OpeningHoursRepository->findAll();
 
 
-            $this->render('planningr/list', [
-                'planning' => $planning
+            $this->render('openinghours/list', [
+                'openinghours' => $openinghours
             ]);
             
         } catch(\Exception $e) {
@@ -94,7 +94,7 @@ class PlanningController extends Controller
         try {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Vérification des données POST
-                $requiredFields = ['jour1', 'hour1', 'jour2', 'hour2', 'jour3', 'hour3', 'jour4', 'hour4', 'jour5', 'hour5', 'jour6', 'hour6', 'jour7', 'hour7'];
+                $requiredFields = ['day_of_week', 'opening_time', 'closing_time'];
     
                 $missingFields = [];
                 foreach ($requiredFields as $field) {
@@ -105,46 +105,35 @@ class PlanningController extends Controller
     
                 if (empty($missingFields)) {
                     // Récupération des données du formulaire POST
-                    $planning = [
-                        'jour1' => $_POST['jour1'],
-                        'hour1' => $_POST['hour1'],
-                        'jour2' => $_POST['jour2'],
-                        'hour2' => $_POST['hour2'],
-                        'jour3' => $_POST['jour3'],
-                        'hour3' => $_POST['hour3'],
-                        'jour4' => $_POST['jour4'],
-                        'hour4' => $_POST['hour4'],
-                        'jour5' => $_POST['jour5'],
-                        'hour5' => $_POST['hour5'],
-                        'jour6' => $_POST['jour6'],
-                        'hour6' => $_POST['hour6'],
-                        'jour7' => $_POST['jour7'],
-                        'hour7' => $_POST['hour7']
+                    $openinghours = [
+                        'day_of_week' => $_POST['day_of_week'],
+                        'opening_time' => $_POST['opening_time'],
+                        'closing_time' => $_POST['closing_time']
                     ];
     
                     // Appel au repository pour ajouter la mission
-                    $planningRepository = new planningRepository();
-                    $success = $planningRepository->addPlanning($planning);
+                    $OpeningHoursRepository = new OpeningHoursRepository();
+                    $success = $OpeningHoursRepository->addOpeningHours($openinghours);
     
                     if ($success) {
                         // Redirection après succès
-                        header('Location: /planning/list');
+                        header('Location: /openinghours/list');
                         exit();
                     } else {
                         // Gérer l'erreur d'ajout de mission dans le repository
                         $this->render('errors/default', [
-                            'error' => "Echec pour ajouter un planning dans le repository."
+                            'error' => "Echec pour ajouter des horaires dans le repository."
                         ]);
                     }
                 } else {
                     // Gérer les erreurs de données manquantes
-                    $this->render('planning/add', [
+                    $this->render('openinghours/add', [
                         'error' => 'Il manque des informations: ' . implode(', ', $missingFields)
                     ]);
                 }
             } else {
                 // Afficher le formulaire d'ajout de mission
-                $this->render('planning/add');
+                $this->render('openinghours/add');
             }
         } catch (\Exception $e) {
             // Gérer les erreurs génériques
@@ -157,25 +146,16 @@ class PlanningController extends Controller
     protected function edit()
     {
         try {
-            if (isset($_GET['id'])) {
-                $id = (int)$_GET['id'];
-                // Charger la mission par un appel au repository
-                $planningRepository = new PlanningRepository();
-                $planning = $planningRepository->findOneById($id);
+                $OpeningHoursRepository = new OpeningHoursRepository();
+                $openinghours = $OpeningHoursRepository->findAll();
 
-                if ($planning) {
-                    // Afficher le formulaire d'édition avec les données de la mission
-                    $this->render('planning/edit', [
-                        'planning' => $planning
+                if ($openinghours) {
+                    $this->render('openinghours/edit', [
+                        'openinghours' => $openinghours
                     ]);
                 } else {
                     throw new \Exception("Planning non trouvée");
                 }
-            } else {
-                throw new \Exception("L'id est manquant");
-
-            }
-
         } catch (\Exception $e) {
             $this->render('errors/default', [
                 'error' => $e->getMessage()
@@ -189,8 +169,8 @@ class PlanningController extends Controller
             if (isset($_GET['id'])) {
                 $id = (int)$_GET['id'];
 
-                $planningRepository = new PlanningRepository();
-                $success = $planningRepository->deletePlanning($id);
+                $OpeningHoursRepository = new OpeningHoursRepository();
+                $success = $OpeningHoursRepository->deleteOpeningHours($id);
 
                 if ($success) {
                     // Rediriger vers la liste des missions après la suppression réussie

@@ -1,4 +1,4 @@
-  <?php
+<?php
     if (session_status() === PHP_SESSION_NONE) {
       session_start();
     }
@@ -9,7 +9,7 @@
 
       if ($role === 'administrateur' or $role === 'employe') {
     ?>
-        <div>
+      <div>
           <?php
           require_once('templates/admin/admin_nav.php');
 

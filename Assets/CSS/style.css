@@ -757,7 +757,7 @@ footer{
 }
 .slideshow-container {
     position: relative;
-    background: green;
+    background: #dee2e6;
     padding: 20px;
 }
 .mySlides {
@@ -785,7 +785,7 @@ footer{
 }
 .dot-container {
     text-align: center;
-    background: green;
+    background: #dee2e6;
 }
 .dot {
     cursor: pointer;

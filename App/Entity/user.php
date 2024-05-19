@@ -5,8 +5,8 @@ namespace App\Entity;
 class user 
 {
     protected ?int $id_user = null;
-    protected string $last_name;
-    protected string $first_name;
+    protected string $lastname;
+    protected string $firstname;
     protected string $email;
     protected string $password_hash;
     protected string $role;
@@ -33,37 +33,37 @@ class user
     }
 
     /**
-     * Get the value of last_name
+     * Get the value of lastname
      */
-    public function getLastName(): string
+    public function getLastname(): string
     {
-        return $this->last_name;
+        return $this->lastname;
     }
 
     /**
-     * Set the value of last_name
+     * Set the value of lastname
      */
-    public function setLastName(string $last_name): self
+    public function setLastname(string $lastname): self
     {
-        $this->last_name = $last_name;
+        $this->lastname = $lastname;
 
         return $this;
     }
 
     /**
-     * Get the value of first_name
+     * Get the value of firstname
      */
-    public function getFirstName(): string
+    public function getFirstname(): string
     {
-        return $this->first_name;
+        return $this->firstname;
     }
 
     /**
-     * Set the value of first_name
+     * Set the value of firstname
      */
-    public function setFirstName(string $first_name): self
+    public function setFirstname(string $firstname): self
     {
-        $this->first_name = $first_name;
+        $this->firstname = $firstname;
 
         return $this;
     }

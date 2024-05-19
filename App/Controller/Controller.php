@@ -30,8 +30,8 @@ class Controller
                         $pageController = new ServicesController();
                         $pageController->route();
                         break;
-                    case 'planning': 
-                        $pageController = new PlanningController();
+                    case 'openinghours': 
+                        $pageController = new OpeningHoursController();
                         $pageController->route();
                         break;
                     case 'user': 

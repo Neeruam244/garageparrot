@@ -9,8 +9,8 @@
                 <!--Full with slides and quotes-->
                 <?php  foreach ($publish as $p) : ?>
                 <div class="mySlides">
-                    <q><?= $p["opinion"]?></q>  
-                    <p class="author"><?= $p["client_name"]?> <img src="<?= $p["note"]?>" width="120px" height="20px" class="stars"></p>
+                    <q><?= htmlspecialchars($p["opinion"])?></q>  
+                    <p class="author"><?= htmlspecialchars($p["client_name"])?> <img src="<?= htmlspecialchars($p["note"])?>" width="120px" height="20px" class="stars"></p>
                 </div>
                 <?php endforeach; ?>
                

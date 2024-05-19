@@ -37,7 +37,11 @@ class UserController extends Controller
                     case 'connexion': 
                         // appeler méthode connexion()
                         $this->connexion();
-                        break; 
+                        break;  
+                    //case 'admin': 
+                        // appeler méthode admin()
+                        //$this->admin();
+                       // break;  
                     default : 
                         throw new \Exception("Cette action n'existe pas : ".$_GET['action']);
                         break;
@@ -50,8 +54,6 @@ class UserController extends Controller
                 'error' => $e->getMessage()
             ]);
         }
-
-        
     }
 
     
@@ -103,7 +105,7 @@ class UserController extends Controller
         try {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Vérification des données POST
-                $requiredFields = ['first_name', 'last_name', 'email', 'password', 'role'];
+                $requiredFields = ['firstname', 'lastname', 'email', 'password_hash', 'role'];
     
                 $missingFields = [];
                 foreach ($requiredFields as $field) {
@@ -115,10 +117,10 @@ class UserController extends Controller
                 if (empty($missingFields)) {
                     // Récupération des données du formulaire POST
                     $user = [
-                        'first_name' => $_POST['first_name'],
-                        'last_name' => $_POST['last_name'],
+                        'firstname' => $_POST['firstname'],
+                        'lastname' => $_POST['lastname'],
                         'email' => $_POST['email'],
-                        'password' => $_POST['password'],
+                        'password_hash' => $_POST['password_hash'],
                         'role' => $_POST['role']
                     ];
     
@@ -143,7 +145,7 @@ class UserController extends Controller
                     ]);
                 }
             } else {
-                // Afficher le formulaire d'ajout de mission
+                // Afficher le formulaire d'ajout d'employé
                 $this->render('user/add');
             }
         } catch (\Exception $e) {

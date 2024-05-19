@@ -49,13 +49,13 @@ class UserRepository
         $mysql = Mysql::getInstance();
         $pdo = $mysql->getPDO();
 
-        $query = $pdo->prepare('INSERT INTO user (last_name, first_name, email, password, role) 
+        $query = $pdo->prepare('INSERT INTO user (lastname, firstname, email, password_hash, role) 
             VALUES (:last_name, :first_name, :email, :password, :role)');
 
-        $query->bindValue(':last_name', $user['last_name']);
-        $query->bindValue(':first_name', $user['first_name']);
+        $query->bindValue(':lastname', $user['lastname']);
+        $query->bindValue(':firstname', $user['firstname']);
         $query->bindValue(':email', $user['email']);
-        $query->bindValue(':password', $user['password']);
+        $query->bindValue(':password_hash', $user['password_hash']);
         $query->bindValue(':role', $user['role']);
 
         $query->execute();
@@ -67,13 +67,13 @@ class UserRepository
         $mysql = Mysql::getInstance();
         $pdo = $mysql->getPDO();
 
-        $query = $pdo->prepare('UPDATE user SET last_name = :last_name, first_name = :first_name, email = :email, password = :password, role = :role WHERE id_user = :id_user');
+        $query = $pdo->prepare('UPDATE user SET lastname = :lastname, firstname = :firstname, email = :email, password_hash = :password_hash, role = :role WHERE id_user = :id_user');
 
         $query->bindValue(':id_user', $id_user, $pdo::PARAM_INT);
-        $query->bindValue(':last_name', $user['last_name']);
-        $query->bindValue(':first_name', $user['first_name']);
+        $query->bindValue(':lastname', $user['lastname']);
+        $query->bindValue(':firstname', $user['firstname']);
         $query->bindValue(':email', $user['email']);
-        $query->bindValue(':password', $user['password']);
+        $query->bindValue(':password_hash', $user['password_hash']);
         $query->bindValue(':role', $user['role']);
 
         $query->execute();

@@ -6,12 +6,12 @@
 <?php  foreach ($services as $s) : ?>
 
 <div class="contain-services ">
-    <img src="<?= $s["picture"]?>" class="photos-servicess">
-    <h3 class="h2titles"><?= $s["title"]?></h3>
+    <img src="<?= htmlspecialchars($s["picture"])?>" class="photos-servicess">
+    <h3 class="h2titles"><?= htmlspecialchars($s["title"])?></h3>
 
     <div class="para-servicess">
-    <p><?= $s["text_presentation"]?></p>
-    <p><?= $s["list"]?></p>
+    <p><?= htmlspecialchars($s["text_presentation"])?></p>
+    <p><?= htmlspecialchars($s["list"])?></p>
     </div>
 </div>
 <?php endforeach; ?>

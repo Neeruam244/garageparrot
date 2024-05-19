@@ -6,7 +6,7 @@
 
     <h1 class="mb-5">Ajouter un nouveau service</h1>
 
-    <form method="post" action="/services/add">
+    <form method="post" action="services/add.php">
 
       <div class="mb-3">
         <label for="title" class="form-label">Titre :</label>

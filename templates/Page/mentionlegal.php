@@ -49,4 +49,5 @@
     <p class="para-ml">Nous utilisons des cookies pour améliorer votre expérience sur notre site web. Les cookies sont de petits fichiers texte stockés sur votre appareil qui nous aident à analyser les tendances, 
     à administrer le site, à suivre les mouvements des utilisateurs et à collecter des informations démographiques.</p>    
 
+
 <?php  require_once _ROOTPATH_.'\templates\footer.php'; ?>

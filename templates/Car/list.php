@@ -60,15 +60,15 @@
 <?php  foreach ($car as $c) : ?>
 <div class="wrapper">
     <div class="product-img">
-        <img src="<?= $c["picture"]?>" class="img-card">
+        <img src="<?= htmlspecialchars($c["picture"])?>" class="img-card" alt="Image de la voiture">
     </div>
     <div class="product-info">
       <div class="product-text">
-        <h1 class="title-card"><?= $c["brand"]?> <?= $c["model"]?></h1>
-        <h2 class=subtitle-card><?= $c["description"]?></h2>
-        <p class=para-card>Année : <?= $c["year"]?>  <br> Kilométrage : <?= $c["mileage"]?> km <br> Energie : <?= $c["energy"]?> </p>
-        <p class="price"><strong><?= $c["price"]?> €</strong></p>
-        <form action="index.php?controller=car&action=show&id=<?= $c["id_car"]?>" method="GET" target="_blank"><button type="submit" class="btn1 outline" >Details</button></form> 
+        <h1 class="title-card"><?= htmlspecialchars($c["brand"])?> <?= $c["model"]?></h1>
+        <h2 class="subtitle-card"><?= htmlspecialchars($c["description"])?></h2>
+        <p class="para-card">Année : <?= htmlspecialchars($c["year"])?>  <br> Kilométrage : <?= htmlspecialchars($c["mileage"])?> km <br> Energie : <?= htmlspecialchars($c["energy"])?> </p>
+        <p class="price"><strong><?= htmlspecialchars($c["price"])?> €</strong></p>
+        <form action="index.php?controller=car&action=show&id=<?= urlencode($c["id_car"])?>" method="GET" target="_blank"><button type="submit" class="btn1 outline" >Details</button></form> 
       </div>
     </div>
 </div>
