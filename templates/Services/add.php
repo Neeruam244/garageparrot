@@ -1,10 +1,6 @@
-<?php  require_once _ROOTPATH_.'\templates\header.php'; ?>
-
-
-
 <div class="container mt-5">
 
-    <h1 class="mb-5">Ajouter un nouveau service</h1>
+    <h4 class="mb-5">Ajouter un nouveau service</h4>
 
     <form method="post" action="services/add.php">
 
@@ -35,5 +31,3 @@
     </form>
 
 </div>
-
-<?php  require_once _ROOTPATH_.'\templates\footer.php'; ?>

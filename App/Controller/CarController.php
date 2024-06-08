@@ -90,63 +90,87 @@ class CarController extends Controller
 
     protected function add()
     {
+        var_dump($_POST);
         try {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                // Vérification des données POST
-                $requiredFields = ['brand', 'model', 'description', 'created_at', 'year', 'mileage', 'energy', 'price', 'transmission', 'color', 'door_number', 'fiscal_power', 'interior_equipments', 'exterior_equipments', 'security_equipments', 'others_equipments', 'picture'];
+                // Liste des champs requis
+                $requiredFields = ['brand', 'model', 'description', 'created_at', 'year', 'mileage', 'energy', 'price', 'transmission', 'color', 
+                'door_number', 'fiscal_power', 'interior_equipments', 'exterior_equipments', 'security_equipments', 'others_equipments', 'picture'];
     
                 $missingFields = [];
                 foreach ($requiredFields as $field) {
-                    if (!isset($_POST[$field])) {
+                    if (!isset($_POST[$field]) || empty(trim($_POST[$field]))) {
                         $missingFields[] = $field;
                     }
                 }
+
+                if (!empty($missingFields)) {
+                    $this->render('car/add', [
+                        'error' => 'Il manque des informations: ' . implode(', ', $missingFields)
+                    ]);
+                    return;
+                }
     
-                if (empty($missingFields)) {
-                    // Récupération des données du formulaire POST
+                // Validation des données
                     $car = [
-                        'brand' => $_POST['brand'],
-                        'model' => $_POST['model'],
-                        'description' => $_POST['description'],
-                        'created_at' => $_POST['created_at'],
-                        'year' => $_POST['year'],
-                        'mileage' => $_POST['mileage'],
-                        'energy' => $_POST['energy'],
-                        'price' => $_POST['price'],
-                        'transmission' => $_POST['transmission'],
-                        'color' => $_POST['color'],
-                        'door_number' => $_POST['door_number'],
-                        'fiscal_power' => $_POST['fiscal_power'],
-                        'interior_equipments' => $_POST['interior_equipments'],
-                        'exterior_equipments' => $_POST['exterior_equipments'],
-                        'security_equipments' => $_POST['security_equipments'],
-                        'others_equipments' => $_POST['others_equipments'],
-                        'picture' => $_POST['picture']
+                        'brand' => filter_input(INPUT_POST, 'brand'),
+                        'model' => filter_input(INPUT_POST, 'model'),
+                        'description' => filter_input(INPUT_POST, 'description'),
+                        'created_at' => filter_input(INPUT_POST, 'created_at'),
+                        'year' => filter_input(INPUT_POST, 'year'),
+                        'mileage' => filter_input(INPUT_POST, 'mileage'),
+                        'energy' => filter_input(INPUT_POST, 'energy'),
+                        'price' => filter_input(INPUT_POST, 'price'),
+                        'transmission' => filter_input(INPUT_POST, 'transmission'),
+                        'color' => filter_input(INPUT_POST, 'color'),
+                        'door_number' => filter_input(INPUT_POST, 'door_number'),
+                        'fiscal_power' => filter_input(INPUT_POST, 'fiscal_power'),
+                        'interior_equipments' => filter_input(INPUT_POST, 'interior_equipments'),
+                        'exterior_equipments' => filter_input(INPUT_POST, 'exterior_equipments'),
+                        'security_equipments' => filter_input(INPUT_POST, 'security_equipments'),
+                        'others_equipments' => filter_input(INPUT_POST, 'others_equipments'),
                     ];
-    
-                    // Appel au repository pour ajouter la mission
+
+                // Gestion de l'image
+                if (isset($_FILES['picture']) && $_FILES['picture']['error'] == UPLOAD_ERR_OK) {
+                    $picture = $_FILES['picture'];
+                    $uploadDir = '/path/to/upload/dir/';
+                    $uploadFile = $uploadDir . basename($picture['name']);
+
+                    if (!move_uploaded_file($picture['tmp_name'], $uploadFile)) {
+                        $this->render('car/add', [
+                            'error' => 'Erreur lors de l\'upload de l\'image.'
+                        ]);
+                        return;
+                    }
+
+                    $car['picture'] = $uploadFile;
+                } else {
+                    $this->render('car/add', [
+                        'error' => 'L\'image est manquante ou il y a eu une erreur lors de l\'upload.'
+                    ]);
+                    return;
+                }
+
+                // Insertion dans le dépôt de données
                     $carRepository = new CarRepository();
                     $success = $carRepository->addCar($car);
     
                     if ($success) {
+                        $redirectUrl = '/index.php?controller=page&action=home';
+                        var_dump($redirectUrl); // Afficher l'URL de redirection
                         // Redirection après succès
-                        header('Location: /car/list');
+                        header('Location: ' . $redirectUrl);
                         exit();
                     } else {
-                        // Gérer l'erreur d'ajout de mission dans le repository
+                        // Gérer l'erreur 
                         $this->render('errors/default', [
-                            'error' => "Echec pour ajouter un véhicule dans le repository."
+                            'error' => "Echec pour ajouter un véhicule."
                         ]);
                     }
-                } else {
-                    // Gérer les erreurs de données manquantes
-                    $this->render('car/add', [
-                        'error' => 'Il manque des informations: ' . implode(', ', $missingFields)
-                    ]);
-                }
             } else {
                 // Afficher le formulaire d'ajout de mission
-                $this->render('car/add');
+                $this->render('/car/add');
             }
         } catch (\Exception $e) {
             // Gérer les erreurs génériques

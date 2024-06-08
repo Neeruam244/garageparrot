@@ -1,4 +1,4 @@
-<h1>Modifier les horaires du garage</h1>
+<h3>Modifier les horaires du garage</h3>
 
 <form id="openingHoursForm" action="openinghours/edit.php" method="post">
   <table>

@@ -1,0 +1,23 @@
+# Activer mod_rewrite
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Rediriger toutes les requêtes vers index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
+
+# Sécuriser le fichier .htaccess lui-même
+<Files .htaccess>
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Empêcher l'accès aux fichiers sensibles
+<FilesMatch "\.(env|ini|log|sh|inc|bak|sql)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+

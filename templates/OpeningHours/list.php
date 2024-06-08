@@ -1,4 +1,4 @@
-<h1>Les horaires du garage</h1>
+<h3>Les horaires du garage</h3>
 
 <?php  foreach ($openinghours as $o) : ?>
 
@@ -33,5 +33,4 @@
     </tbody>
     <?php endforeach; ?>
   </table>
-  <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
 </form>

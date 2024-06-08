@@ -3,12 +3,12 @@
 use App\Entity\user;
 use App\Repository\UserRepository;
 
-  require_once _ROOTPATH_.'\templates\header.php'; ?>
+require_once _ROOTPATH_.'\templates\header.php'; ?>
 
 
 <div class="form-container">
     <p class="title-login">Login</p>
-        <form class="form" method="POST" action="">
+        <form class="form" method="POST" action="/index.php?controller=user&action=connexion">
             <div class="groupinput">
                 <label for="email">Email</label>
                 <input type="email" name="email" id="email" placeholder="">

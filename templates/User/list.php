@@ -1,23 +1,23 @@
-<h1>Liste des employés</h1>
+<h4>Liste des employés</h4>
 
-    <table style="border: 1px solid black; border-collapse:collapse;">
+    <table style="display: inline-table; border: 1px solid black;">
         <thead>
-            <tr>
-                <th>Nom</th>
-                <th>Prénom</th>
-                <th>Email</th>
-                <th>Mot de passe</th>
-                <th>Rôle</th>
+            <tr >
+                <th style="padding:5px;">Nom</th>
+                <th style="padding:5px;">Prénom</th>
+                <th style="padding:5px;">Email</th>
+                <th style="padding:5px;">Mot de passe</th>
+                <th style="padding:5px;">Rôle</th>
             </tr>
         </thead>
         <tbody>
         <?php  foreach ($user as $u) : ?>
             <tr>
-                <td><?= htmlspecialchars($u["lastname"])?></td>
-                <td><?= htmlspecialchars($u["firstname"])?></td>
-                <td><?= htmlspecialchars($u["email"])?></td>
-                <td><?= htmlspecialchars($u["password_hash"])?></td>
-                <td><?= htmlspecialchars($u["role"])?></td>
+                <td style="padding:5px;"><?= htmlspecialchars($u["lastname"])?></td>
+                <td style="padding:5px;"><?= htmlspecialchars($u["firstname"])?></td>
+                <td style="padding:5px;"><?= htmlspecialchars($u["email"])?></td>
+                <td style="padding:5px;"><?= htmlspecialchars($u["password_hash"])?></td>
+                <td style="padding:5px;"><?= htmlspecialchars($u["role"])?></td>
             </tr>
         <?php endforeach; ?>
         </tbody>

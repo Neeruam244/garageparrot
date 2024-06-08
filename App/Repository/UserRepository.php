@@ -118,10 +118,10 @@ class UserRepository
 
                 // Redirection en fonction du rôle de l'utilisateur
                 if ($userRole === "administrateur") {
-                    header("Location: admin.php");
+                    header("Location: /index.php?controller=user&action=admin");
                     exit();
                 } elseif ($userRole === "employé") {
-                    header("Location: employe.php");
+                    header("Location: /index.php?controller=user&action=employe");
                     exit();
                 } else {
                     echo "Rôle non reconnu";

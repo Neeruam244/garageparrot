@@ -37,11 +37,15 @@ class UserController extends Controller
                     case 'connexion': 
                         // appeler méthode connexion()
                         $this->connexion();
-                        break;  
-                    //case 'admin': 
+                        break;
+                    case 'admin': 
                         // appeler méthode admin()
-                        //$this->admin();
-                       // break;  
+                        $this->admin();
+                        break; 
+                    case 'employe': 
+                        // appeler méthode employe()
+                        $this->employe();
+                        break;    
                     default : 
                         throw new \Exception("Cette action n'existe pas : ".$_GET['action']);
                         break;
@@ -233,5 +237,19 @@ class UserController extends Controller
                     'error' => $e->getMessage()
                 ]);
             }
+    }
+
+    protected function admin()
+    {
+
+        $this->render('user/admin', [ 
+        ]);
+    }
+
+    protected function employe()
+    {
+
+        $this->render('user/employe', [ 
+        ]);
     }
 }

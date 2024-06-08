@@ -4,7 +4,7 @@ html body{
     font-family: 'barlow', sans-serif;
     z-index: 1;
 }
-h1, h2{
+h1, h2, h3, h4, h5{
     font-family: 'Acme', sans-serif;
 }
 /* ---NAVBAR--- */ 
@@ -1120,7 +1120,7 @@ select{
         text-align: left;
     }
     .filter{
-        margin:30px 20px 20px 150px;
+        margin:50px 100px 10px 100px;
     }
     .type-filter{
         display: block;
@@ -1508,132 +1508,8 @@ td{
 }
 
 /*  --- BACK OFFICE ADMIN ---   */
-.bo-admin{
-    font-family: 'Acme', sans-serif;
-    margin: 20px;
-    text-align: center;
-}
-.logout {
-    position: relative;
-    margin-top: 100px;
-    margin-left: 110px;
-    padding: 12px 18px;
-    transition: all 0.2s ease;
-    border: none;
-    background: none;
-}
-.logout:before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: block;
-    border-radius: 50px;
-    background: #ffb700;
-    width: 45px;
-    height: 45px;
-    transition: all 0.3s ease;
-}
-.logout span {
-    position: relative;
-    font-family: "Ubuntu", sans-serif;
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    color: #21211f;
-}
-.logout:hover:before {
-    width: 100%;
-    background: #ffb700;
-}
-.logout:active {
-    transform: scale(0.95);
-}
-.subtitle-bo{
-    font-family: 'Acme', sans-serif;
-    margin : 20px;
-    text-align: center;
-}
-.body-table{
-    margin: 20px;
-}
-.ajout{
-    color: green;
-    font-weight: bold;
-    text-align: center;
-}
-.modif{
-    color: orange;
-    font-weight: bold;
-    text-align: center;
-}
-.suppr{
-    color: red;
-    font-weight: bold;
-    text-align: center;
-}
-@media screen and (min-width: 768px){
-    .bo-admin{
-        font-family: 'Acme', sans-serif;
-        margin-top: 200px;
-        margin-left: 100px;
-        text-align: left;
-    }
-    .logout {
-        float: right;
-        position: relative;
-        margin: 10px;;
-        padding: 12px 18px;
-        transition: all 0.2s ease;
-        border: none;
-        background: none;
-    }
-    .logout:before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        display: block;
-        border-radius: 50px;
-        background: #ffb700;
-        width: 45px;
-        height: 45px;
-        transition: all 0.3s ease;
-    }
-    .logout span {
-        position: relative;
-        font-family: "Ubuntu", sans-serif;
-        font-size: 18px;
-        font-weight: 700;
-        letter-spacing: 0.05em;
-        color: #21211f;
-    }
-    .logout:hover:before {
-        width: 100%;
-        background: #ffb700;
-    }
-    .logout:active {
-        transform: scale(0.95);
-    }
-    .subtitle-bo{
-        font-family: 'Acme', sans-serif;
-        margin-top: 50px;
-        margin-left: 150px;
-        text-align: left;
-    }
-    .body-table{
-        margin: 20px 20px 20px 200px;
-    }
-}
+
+
 /*  --- BACK OFFICE EMPLOYE ---   */
-.sous-subtitle{
-    font-family: 'Raleway', sans-serif;
-    text-align: center;
-}
-@media screen and (min-width: 768px){
-    .sous-subtitle{
-        font-family: 'Raleway', sans-serif;
-        margin-left: 170px;
-        text-align: left;
-    }
-}
+
+

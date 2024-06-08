@@ -66,7 +66,7 @@ class CarRepository {
         $query->bindValue(':fiscal_power', $car['fiscal_power']);
         $query->bindValue(':interior_equipments', $car['interior_equipments']);
         $query->bindValue(':exterior_equipments', $car['exterior_equipments']);
-        $query->bindValue(':security_equipmentse', $car['security_equipments']);
+        $query->bindValue(':security_equipments', $car['security_equipments']);
         $query->bindValue(':others_equipments', $car['others_equipments']);
         $query->bindValue(':picture', $car['picture']);
 
