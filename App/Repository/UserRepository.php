@@ -43,23 +43,24 @@ class UserRepository
     }
 
 
-    public function AddUser(array $user)
+    public function addUser($lastname, $firstname, $email, $hashed_password, $role)
     {
         //Appel BDD
         $mysql = Mysql::getInstance();
         $pdo = $mysql->getPDO();
 
-        $query = $pdo->prepare('INSERT INTO user (lastname, firstname, email, password_hash, role) 
-            VALUES (:last_name, :first_name, :email, :password, :role)');
+        $query = $pdo->prepare('INSERT INTO user (lastname, firstname, email, hashed_password, role) 
+            VALUES (:lastname, :firstname, :email, :hashed_password, :role)');
+        
+        $query->bindParam(':lastname', $lastname, $pdo::PARAM_STR);
+        $query->bindParam(':firstname', $firstname, $pdo::PARAM_STR);
+        $query->bindParam(':email', $email, $pdo::PARAM_STR);
+        $query->bindParam(':hashed_password', $hashed_password, $pdo::PARAM_STR);
+        $query->bindParam(':role', $role, $pdo::PARAM_STR);
 
-        $query->bindValue(':lastname', $user['lastname']);
-        $query->bindValue(':firstname', $user['firstname']);
-        $query->bindValue(':email', $user['email']);
-        $query->bindValue(':password_hash', $user['password_hash']);
-        $query->bindValue(':role', $user['role']);
-
-        $query->execute();
+        return $query->execute();
     }
+
 
     public function UpdateUser(int $id_user, array $user)
     {
@@ -104,13 +105,13 @@ class UserRepository
     
     public function connexionTo()
     {   
+    session_start();
         try {
            
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $email = $_POST['email'];
                 $password = $_POST['password'];
 
-                $password_hash = password_hash($password, PASSWORD_BCRYPT);
                 
             if ($this->controlConnexion($email, $password)) {
                 $userRole = $this->RoleUser($email); 
@@ -133,28 +134,32 @@ class UserRepository
         } catch(\Exception $e) {
                 throw $e; 
         }
-        
     }
     
     public function controlConnexion ($email, $password)
     {
-        
-        $password_hash = password_hash($password, PASSWORD_BCRYPT);
+        try{
+            //Appel BDD
+                $mysql = Mysql::getInstance();
+                $pdo = $mysql->getPDO();
 
-        //Appel BDD
-        $mysql = Mysql::getInstance();
-        $pdo = $mysql->getPDO();
+                $query = $pdo->prepare("SELECT * FROM user WHERE email = :email");
+                $query->bindParam(':email', $email, $pdo::PARAM_STR);
+                $query->execute();
 
-        $query = $pdo->prepare("SELECT * FROM user WHERE email = :email");
-        $query->bindParam(':email', $email, $pdo::PARAM_STR);
-        $query->execute();
-        $user = $query->fetch();
+                $user = $query->fetch();
   
-        // if ($user && password_verify($password, $user['password_hash'])) {
-        
-        if ($password === $user['password_hash']) {
-            return true;
-        } else {
+            //Vérification du mot de passe haché
+                if ($user && password_verify($password, $user['hashed_password'])) {
+                    return true;
+                } else {
+                   echo "Mot de passe incorrect.";
+                   return false;
+                }
+        } catch (\Exception $e) {
+            // Gestion des erreurs de base de données
+            // Vous pouvez enregistrer l'erreur dans un fichier de log ou afficher un message d'erreur
+            error_log("Erreur de connexion à la base de données: " . $e->getMessage());
             return false;
         }
     }

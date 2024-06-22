@@ -12,23 +12,18 @@ class OpeningHoursController extends Controller
             if (isset ($_GET['action'])){
                 switch ($_GET['action']) {
                     case 'show': 
-                        // appeler méthode show() 
                         $this->show();
                         break;
                     case 'list': 
-                        // appeler méthode list()
                         $this->list();
                         break;
                     case 'edit': 
-                        // appeler méthode edit()
                         $this->edit();
                         break;
                     case 'add': 
-                        // appeler méthode add()
                         $this->add();
                         break;
                     case 'delete': 
-                        // appeler méthode delete()
                         $this->delete();
                         break;
                     default : 
@@ -53,7 +48,6 @@ class OpeningHoursController extends Controller
             if (isset($_GET['id'])) {
 
                 $id = (int)$_GET['id'];
-                // Charger la mission par un appel au repository
                 $OpeningHoursRepository = new OpeningHoursRepository();
                 $openinghours = $OpeningHoursRepository->findOneById($id);
 
@@ -111,32 +105,26 @@ class OpeningHoursController extends Controller
                         'closing_time' => $_POST['closing_time']
                     ];
     
-                    // Appel au repository pour ajouter la mission
                     $OpeningHoursRepository = new OpeningHoursRepository();
                     $success = $OpeningHoursRepository->addOpeningHours($openinghours);
     
                     if ($success) {
-                        // Redirection après succès
                         header('Location: /openinghours/list');
                         exit();
                     } else {
-                        // Gérer l'erreur d'ajout de mission dans le repository
                         $this->render('errors/default', [
                             'error' => "Echec pour ajouter des horaires dans le repository."
                         ]);
                     }
                 } else {
-                    // Gérer les erreurs de données manquantes
                     $this->render('openinghours/add', [
                         'error' => 'Il manque des informations: ' . implode(', ', $missingFields)
                     ]);
                 }
             } else {
-                // Afficher le formulaire d'ajout de mission
                 $this->render('openinghours/add');
             }
         } catch (\Exception $e) {
-            // Gérer les erreurs génériques
             $this->render('errors/default', [
                 'error' => "Erreur: " . $e->getMessage()
             ]);
@@ -173,21 +161,17 @@ class OpeningHoursController extends Controller
                 $success = $OpeningHoursRepository->deleteOpeningHours($id);
 
                 if ($success) {
-                    // Rediriger vers la liste des missions après la suppression réussie
                     header("Location: /index.php");
                     exit;
                 } else {
-                    // Gérer l'échec de la suppression, par exemple, afficher un message d'erreur
                     include 'templates/errors/delete_failed.php';
                 }
             } else {
-                // L'ID est manquant, gérer cela en conséquence
                 $this->render('errors/default', [
                     'error' => "L'ID est manquant"
                 ]);
             }
         } catch (\Exception $e) {
-            // Gérer d'autres exceptions, journaliser l'erreur, etc.
             $this->render('errors/default', [
                 'error' => $e->getMessage()
             ]);

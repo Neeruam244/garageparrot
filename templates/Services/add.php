@@ -2,7 +2,7 @@
 
     <h4 class="mb-5">Ajouter un nouveau service</h4>
 
-    <form method="post" action="services/add.php">
+    <form method="post" action="index.php?controller=services&action=add">
 
       <div class="mb-3">
         <label for="title" class="form-label">Titre :</label>
@@ -11,12 +11,12 @@
 
       <div class="mb-3">
         <label for="text_presentation" class="form-label">Rapide texte de présentation :</label>
-        <input type="text" name="text_presentation" required class="form-control">
+        <textarea lass="form-control" name="text_presentation" rows="2" cols="50"  required></textarea>
       </div>
 
       <div class="mb-3">
         <label for="list" class="form-label">Liste des réparations effectués :</label>
-        <input type="text" name="list" required class="form-control">
+        <textarea lass="form-control" name="list" rows="2" cols="50"  required></textarea>
       </div>
 
       <div class="mb-3">

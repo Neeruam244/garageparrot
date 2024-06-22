@@ -1,101 +1,67 @@
-<div class="modal fade" id="createVehicleModal" tabindex="-1" aria-labelledby="createVehicleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
+<h5 class="modal-title" id="createVehicleModalLabel">Créer un nouveau véhicule</h5>
 
-      <div class="modal-header">
-        <h4 class="modal-title" id="createVehicleModalLabel">Créer un nouveau véhicule</h4>
-      </div>
+  <form action="index.php?controller=car&action=add" method="POST" enctype="multipart/form-data">
+    <label for="brand">Marque</label>
+    <input type="text" id="brand" name="brand" required><br>
 
-      <div class="modal-body">
-        <form action="/index.php?controller=car&action=add" method="POST" enctype="multipart/form-data">
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <label for="brand" class="form-label">Marque</label>
-              <input type="text" class="form-control" id="brand" name="brand" required>
-            </div>
-            <div class="col-md-6">
-              <label for="model" class="form-label">Modèle</label>
-              <input type="text" class="form-control" id="model" name="model" required>
-            </div>
-            <div class="col-md-6">
-              <label for="modele" class="form-label">Description</label>
-              <textarea class="form-control" id="description" name="description" rows="2" cols="50"  required></textarea>
-            </div>
-          </div>
+    <label for="model">Modèle</label>
+    <input type="text" id="model" name="model" required><br>
 
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <label for="created_at" class="form-label">Année de mise en circulation</label>
-              <input type="number" class="form-control" id="created_at" name="created_at" required>
-            </div>
-            <div class="col-md-6">
-              <label for="mileage" class="form-label">Kilométrage</label>
-              <input type="number" class="form-control" id="mileage" name="mileage" required>
-            </div>
-            <div class="col-md-6">
-              <label for="energy" class="form-label">Energie</label>
-              <input type="text" class="form-control" id="energy" name="energy" required>
-            </div>
-            <div class="col-md-6">
-              <label for="price" class="form-label">Prix</label>
-              <input type="number" class="form-control" id="price" name="price" required>
-            </div>
-          </div>
+    <label for="modele" >Description</label>
+    <textarea id="description" name="description" rows="2" cols="50"  required></textarea><br>
 
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <label for="transmission" class="form-label">Boite de vitesse</label>
-              <input type="text" class="form-control" id="transmission" name="transmission" required>
-            </div>
-            <div class="col-md-6">
-              <label for="color" class="form-label">Couleur</label>
-              <input type="text" class="form-control" id="color" name="color" required>
-            </div>
-            <div class="col-md-6">
-              <label for="door_number" class="form-label">Nombres de portes</label>
-              <input type="number" class="form-control" id="door_number" name="door_number" required>
-            </div>
-            <div class="col-md-6">
-              <label for="fiscal_power" class="form-label">Puissance fiscal</label>
-              <input type="number" class="form-control" id="fiscal_power" name="fiscal_power" required>
-            </div>
-          </div>
+    <label for="created_at">Date de la mise en circulation</label>
+    <input type="date" id="created_at" name="created_at" required><br>
 
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <label for="interior_equipments" class="form-label">Equipement intérieur</label>
-              <textarea type="text" class="form-control" id="interior_equipments" name="interior_equipments" required rows="2" cols="50"></textarea>
-            </div>
-            <div class="col-md-6">
-              <label for="exterior_equipments" class="form-label">Equipement exterieur</label>
-              <textarea type="text" class="form-control" id="exterior_equipments" name="exterior_equipments" required rows="2" cols="50"></textarea>
-            </div>
-            <div class="col-md-6">
-              <label for="security_equipments" class="form-label">Equipement de sécurité</label>
-              <textarea type="text" class="form-control" id="security_equipments" name="security_equipments" required rows="2" cols="50"></textarea>
-            </div>
-            <div class="col-md-6">
-              <label for="others_equipments" class="form-label">Autres équipement</label>
-              <textarea type="text" class="form-control" id="others_equipments" name="others_equipments" required rows="2" cols="50"></textarea>
-            </div>
+    <label for="year">Année de la mise en circulation</label>
+    <input type="number" id="year" name="year" required><br>
 
-          <div class="row mb-3">
-            <div class="col-12">
-              <label for="picture" class="form-label">Image du véhicule</label>
-              <input type="file" class="form-control" id="picture" name="picture" accept="image/*" required accept=".jpg, .jpeg, .png, .gif" maxlength="2000000">
-            </div>
-          </div>
+    <label for="mileage">Kilométrage</label>
+    <input type="number" id="mileage" name="mileage" required><br>
 
-          <button type="submit" class="btn btn-primary">Valider</button>
+    <label for="energy">Energie</label>
+    <select name="energy" id="energy" required>
+      <option value="diesel">Diesel</option>
+      <option value="essence">Essence</option>
+      <option value="électrique">Electrique</option>
+    </select><br>
+  
+    <label for="price">Prix</label>
+    <input type="number" id="price" name="price" required><br>
 
-          <?php if (isset($errorMessage)) : ?>
-            <div class="alert alert-danger mt-3" role="alert">
-              <?= $errorMessage; ?>
-            </div>
-          <?php endif; ?>
+    <label for="transmission">Boite de vitesse</label>
+    <select name="transmission" id="transmission" required>
+      <option value="manuelle">Manuelle</option>
+      <option value="automatique">Automatique</option>
+    </select><br>
 
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
+    <label for="color">Couleur</label>
+    <input type="text" id="color" name="color" required><br>
+
+    <label for="door_number">Nombres de portes</label>
+    <input type="number" id="door_number" name="door_number" required><br>
+
+    <label for="fiscal_power">Puissance fiscal</label>
+    <input type="number" id="fiscal_power" name="fiscal_power" required><br>
+
+    <label for="interior_equipments">Equipement intérieur</label>
+    <textarea type="text" id="interior_equipments" name="interior_equipments" required rows="2" cols="50"></textarea><br>
+
+    <label for="exterior_equipments">Equipement exterieur</label>
+    <textarea type="text" id="exterior_equipments" name="exterior_equipments" required rows="2" cols="50"></textarea><br>
+
+    <label for="security_equipments">Equipement de sécurité</label>
+    <textarea type="text" id="security_equipments" name="security_equipments" required rows="2" cols="50"></textarea><br>
+
+    <label for="others_equipments">Autres équipement</label>
+    <textarea type="text" id="others_equipments" name="others_equipments" required rows="2" cols="50"></textarea><br>
+
+    <label for="picture">Image principale du véhicule</label>
+    <input type="file" id="picture" name="picture" accept="image/*" accept=".jpg, .jpeg, .png, .gif" maxlength="2000000"><br>
+
+    <label for="picture1">Autres images</label>
+    <input type="file" id="picture1[]" multiple name="picture1" accept="image/*" accept=".jpg, .jpeg, .png, .gif" maxlength="2000000"><br>
+
+
+    <button type="submit" value="Envoyer" class="btn btn-primary">Valider</button>
+  </form>

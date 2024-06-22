@@ -1,9 +1,4 @@
-<?php
-
-use App\Entity\user;
-use App\Repository\UserRepository;
-
-require_once _ROOTPATH_.'\templates\header.php'; ?>
+<?php require_once _ROOTPATH_.'\templates\header.php'; ?>
 
 
 <div class="form-container">
@@ -27,4 +22,4 @@ require_once _ROOTPATH_.'\templates\header.php'; ?>
         </form>
 </div>
 
-<?php  require_once _ROOTPATH_.'\templates\footer.php'; ?>
+<?php require_once _ROOTPATH_.'\templates\footer.php'; ?>

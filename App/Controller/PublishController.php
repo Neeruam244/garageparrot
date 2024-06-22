@@ -12,11 +12,9 @@ class PublishController extends Controller
             if (isset ($_GET['action'])){
                 switch ($_GET['action']) {
                     case 'show': 
-                        // appeler méthode show() 
                         $this->show();
                         break;
                     case 'list': 
-                        // appeler méthode list()
                         $this->list();
                         break;
                     default : 
@@ -41,7 +39,7 @@ class PublishController extends Controller
             if (isset($_GET['id'])) {
 
                 $id = (int)$_GET['id'];
-                // Charger la mission par un appel au repository
+
                 $publishRepository = new publishRepository();
                 $publish = $publishRepository->findOneById($id);
 

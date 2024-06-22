@@ -43,7 +43,7 @@ class OpinionRepository {
     }
 
     
-    public function AddOpinion(array $opinion)
+    public function AddOpinion($client_name, $opinion, $note)
     {
         //Appel BDD
         $mysql = Mysql::getInstance();
@@ -52,12 +52,11 @@ class OpinionRepository {
         $query = $pdo->prepare('INSERT INTO opinion (client_name, opinion, note) 
             VALUES (:client_name, :opinion, :note)');
 
-        $query->bindValue(':client_name', $opinion['client_name']);
-        $query->bindValue(':opinion', $opinion['opinion']);
-        $query->bindValue(':note', $opinion['note']);
+        $query->bindParam(':client_name', $client_name, $pdo::PARAM_STR);
+        $query->bindParam(':opinion', $opinion, $pdo::PARAM_STR);
+        $query->bindParam(':note', $note, $pdo::PARAM_STR);
         
-
-        $query->execute();
+        return $query->execute();
     }
 
     public function UpdateOpinion(int $id_opinion, array $opinion)
@@ -89,15 +88,12 @@ class OpinionRepository {
             $success = $query->execute();
     
             if (!$success) {
-                // Gérer l'échec de la suppression (peut-être en lançant une exception)
                 throw new \Exception("Impossible de supprimer le témoignage");
             }
     
-            return true; // La suppression a réussi
+            return true; 
         } catch (\Exception $e) {
-            // Gérer l'erreur, par exemple, journaliser l'erreur
-            // Vous pouvez également relancer l'exception pour que le contrôleur puisse la capturer
-            throw $e; // Laissez le contrôleur décider de la façon de gérer cette exception
+            throw $e; 
         }
 
     }

@@ -10,15 +10,12 @@ class PageController extends Controller
             if (isset ($_GET['action'])){
                 switch ($_GET['action']) {
                     case 'home': 
-                        // appeler la méthode home()
                         $this->home();
                         break;
                     case 'mentionlegal': 
-                        // appeler la méthode mention legal()
                         $this->mentionlegal();
                         break;
                     case 'contact': 
-                        // appeler la méthode contact()
                         $this->contact();
                         break;
                     default : 

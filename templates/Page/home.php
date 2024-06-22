@@ -156,7 +156,7 @@
             <div>
                 <div class="input-group">
                     <input required="" type="text" name="text" autocomplete="off" class="input"> 
-                    <label class="user-label">Vote nom</label> 
+                    <label class="user-label">Votre nom</label> 
                 </div>
 
                 <div class="input-group">

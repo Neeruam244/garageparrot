@@ -43,7 +43,7 @@ class ServicesRepository {
     }
 
     
-    public function AddServices(array $services)
+    public function AddServices($title, $text_presentation, $list, $picture)
     {
         //Appel BDD
         $mysql = Mysql::getInstance();
@@ -52,12 +52,12 @@ class ServicesRepository {
         $query = $pdo->prepare('INSERT INTO services (title, text_presentation, list, picture) 
             VALUES (:title, :text_presentation, :list, :picture)');
 
-        $query->bindValue(':title', $services['title']);
-        $query->bindValue(':text_presentation', $services['text_presentationt']);
-        $query->bindValue(':list', $services['list']);
-        $query->bindValue(':picture', $services['picture']);
+        $query->bindParam(':title', $title, $pdo::PARAM_STR);
+        $query->bindParam(':text_presentation', $text_presentation, $pdo::PARAM_STR);
+        $query->bindParam(':list', $list, $pdo::PARAM_STR);
+        $query->bindParam(':picture', $picture, $pdo::PARAM_STR);
 
-        $query->execute();
+        return $query->execute();
     }
 
     public function UpdateCar(int $id_service, array $services)
@@ -90,15 +90,12 @@ class ServicesRepository {
             $success = $query->execute();
     
             if (!$success) {
-                // Gérer l'échec de la suppression (peut-être en lançant une exception)
                 throw new \Exception("Impossible de supprimer le service");
             }
     
-            return true; // La suppression a réussi
+            return true; 
         } catch (\Exception $e) {
-            // Gérer l'erreur, par exemple, journaliser l'erreur
-            // Vous pouvez également relancer l'exception pour que le contrôleur puisse la capturer
-            throw $e; // Laissez le contrôleur décider de la façon de gérer cette exception
+            throw $e; 
         }
 
     }

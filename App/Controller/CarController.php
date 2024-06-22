@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Model\CarModel;
 use App\Repository\CarRepository;
 
 class CarController extends Controller
@@ -12,23 +13,18 @@ class CarController extends Controller
             if (isset ($_GET['action'])){
                 switch ($_GET['action']) {
                     case 'show': 
-                        // appeler méthode show() 
                         $this->show();
                         break;
                     case 'list': 
-                        // appeler méthode list()
                         $this->list();
                         break;
                     case 'edit': 
-                        // appeler méthode edit()
                         $this->edit();
                         break;
                     case 'add': 
-                        // appeler méthode add()
                         $this->add();
                         break;
                     case 'delete': 
-                        // appeler méthode delete()
                         $this->delete();
                         break;
                     default : 
@@ -39,7 +35,7 @@ class CarController extends Controller
                 throw new \Exception("Aucune action détectée");
             }
         } catch (\Exception $e) {
-            $this->render('errors/default', [
+            $this->render('error/default', [
                 'error' => $e->getMessage()
             ]);
         }
@@ -64,7 +60,7 @@ class CarController extends Controller
                 throw new \Exception("L'id est manquant");
             }
         } catch(\Exception $e) {
-            $this->render('errors/default', [
+            $this->render('error/default', [
                 'error' => $e->getMessage()
             ]);
         }  
@@ -82,101 +78,143 @@ class CarController extends Controller
             ]);
             
         } catch(\Exception $e) {
-            $this->render('errors/default', [
+            $this->render('error/default', [
                 'error' => $e->getMessage()
             ]);
         }  
     }
 
+    private $carModel;
+
+    public function __construct($carModel)
+    {
+        $this->carModel = $carModel;
+    }
+
     protected function add()
     {
-        var_dump($_POST);
         try {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                // Liste des champs requis
-                $requiredFields = ['brand', 'model', 'description', 'created_at', 'year', 'mileage', 'energy', 'price', 'transmission', 'color', 
-                'door_number', 'fiscal_power', 'interior_equipments', 'exterior_equipments', 'security_equipments', 'others_equipments', 'picture'];
-    
-                $missingFields = [];
-                foreach ($requiredFields as $field) {
-                    if (!isset($_POST[$field]) || empty(trim($_POST[$field]))) {
-                        $missingFields[] = $field;
-                    }
-                }
 
-                if (!empty($missingFields)) {
-                    $this->render('car/add', [
-                        'error' => 'Il manque des informations: ' . implode(', ', $missingFields)
-                    ]);
-                    return;
-                }
-    
-                // Validation des données
-                    $car = [
-                        'brand' => filter_input(INPUT_POST, 'brand'),
-                        'model' => filter_input(INPUT_POST, 'model'),
-                        'description' => filter_input(INPUT_POST, 'description'),
-                        'created_at' => filter_input(INPUT_POST, 'created_at'),
-                        'year' => filter_input(INPUT_POST, 'year'),
-                        'mileage' => filter_input(INPUT_POST, 'mileage'),
-                        'energy' => filter_input(INPUT_POST, 'energy'),
-                        'price' => filter_input(INPUT_POST, 'price'),
-                        'transmission' => filter_input(INPUT_POST, 'transmission'),
-                        'color' => filter_input(INPUT_POST, 'color'),
-                        'door_number' => filter_input(INPUT_POST, 'door_number'),
-                        'fiscal_power' => filter_input(INPUT_POST, 'fiscal_power'),
-                        'interior_equipments' => filter_input(INPUT_POST, 'interior_equipments'),
-                        'exterior_equipments' => filter_input(INPUT_POST, 'exterior_equipments'),
-                        'security_equipments' => filter_input(INPUT_POST, 'security_equipments'),
-                        'others_equipments' => filter_input(INPUT_POST, 'others_equipments'),
-                    ];
+                $this->validateFormData($_POST);
 
-                // Gestion de l'image
+                // Récupération des données du formulaire POST
+                    $brand = $_POST['brand'];
+                    $model = $_POST['model'];
+                    $description = $_POST['description'];
+                    $created_at = $_POST['created_at'];
+                    $year = $_POST['year'];
+                    $mileage = $_POST['mileage'];
+                    $energy = $_POST['energy'];
+                    $price = $_POST['price'];
+                    $transmission = $_POST['transmission'];
+                    $color = $_POST['color'];
+                    $door_number = $_POST['door_number'];
+                    $fiscal_power = $_POST['fiscal_power'];
+                    $interior_equipments = $_POST['interior_equipments'];
+                    $exterior_equipments = $_POST['exterior_equipments'];
+                    $security_equipments = $_POST['security_equipments'];
+                    $others_equipments = $_POST['others_equipments'];
+                    var_dump($_POST);
+                    var_dump($_FILES);
+
+                // Chemin de base pour le téléchargement des images
+                $uploadDir = 'C:\wamp64\www\garageparrot\uploads\cars\\';
+
+                // Gestion de l'image principale
                 if (isset($_FILES['picture']) && $_FILES['picture']['error'] == UPLOAD_ERR_OK) {
                     $picture = $_FILES['picture'];
-                    $uploadDir = '/path/to/upload/dir/';
                     $uploadFile = $uploadDir . basename($picture['name']);
 
                     if (!move_uploaded_file($picture['tmp_name'], $uploadFile)) {
-                        $this->render('car/add', [
-                            'error' => 'Erreur lors de l\'upload de l\'image.'
-                        ]);
-                        return;
+                        throw new \Exception('Erreur lors de l\'upload de l\'image principale.');
                     }
 
-                    $car['picture'] = $uploadFile;
+                    // Exemple de données à stocker sous forme de JSON pour l'image principale
+                    $mainPictureData = [
+                        'name' => $picture['name'],
+                        'size' => $picture['size'],
+                        'description' => 'Image principale'
+                    ];
+
+                    // Encodage des données en JSON
+                    $encodedMainPicture = json_encode($mainPictureData);
                 } else {
-                    $this->render('car/add', [
-                        'error' => 'L\'image est manquante ou il y a eu une erreur lors de l\'upload.'
-                    ]);
-                    return;
+                    throw new \Exception('L\'image principale est manquante ou il y a eu une erreur lors de l\'upload.');
                 }
 
-                // Insertion dans le dépôt de données
-                    $carRepository = new CarRepository();
-                    $success = $carRepository->addCar($car);
-    
-                    if ($success) {
-                        $redirectUrl = '/index.php?controller=page&action=home';
-                        var_dump($redirectUrl); // Afficher l'URL de redirection
-                        // Redirection après succès
-                        header('Location: ' . $redirectUrl);
-                        exit();
-                    } else {
-                        // Gérer l'erreur 
-                        $this->render('errors/default', [
-                            'error' => "Echec pour ajouter un véhicule."
-                        ]);
-                    }
+                // Gestion des images supplémentaires
+                    $additionalPicturesData = [];
+                        if (!empty($_FILES['picture1']['name']) && is_array($_FILES['picture1']['name'])) {
+                            foreach ($_FILES['picture1']['name'] as $key => $name) {
+                                if ($_FILES['picture1']['error'][$key] === UPLOAD_ERR_OK) {
+                                    $tmp_name = $_FILES['picture1']['tmp_name'][$key];
+                                    $uploadFile = $uploadDir . basename($name);
+
+                                    if (move_uploaded_file($tmp_name, $uploadFile)) {
+                                        $additionalPicturesData[] = [
+                                            'name' => $name,
+                                            'size' => $_FILES['picture1']['size'][$key],
+                                            'description' => 'Image supplémentaire'
+                                            ];
+                                    } else {
+                                            throw new \Exception('Erreur lors de l\'upload de l\'image : ' . $name);
+                                    }
+                                } else {
+                                    throw new \Exception('Erreur lors de l\'upload de l\'image : ' . $name);
+                                }
+                            }       
+
+                            // Encodage des données en JSON pour les images supplémentaires
+                            $encodedAdditionalPictures = json_encode($additionalPicturesData);
+                        } else {
+                            throw new \Exception('Les images supplémentaires sont manquantes ou il y a eu une erreur lors de l\'upload.');
+                        }
+
+
+                $success = $this->carModel->addCar($brand, $model, $description, $created_at, $year, $mileage, $energy, $price, 
+                    $transmission, $color, $door_number, $fiscal_power, $interior_equipments, $exterior_equipments, 
+                    $security_equipments, $others_equipments, $encodedMainPicture, $encodedAdditionalPictures);
+
+                if ($success) {
+                    // Redirection après succès
+                    header('Location: /car?action=list');
+                    exit();
+                } else {
+                    throw new \Exception("Échec de l'ajout d'une voiture d'occasion");
+                }
             } else {
-                // Afficher le formulaire d'ajout de mission
-                $this->render('/car/add');
-            }
+                $this->showAddCarForm();    
+            } 
         } catch (\Exception $e) {
-            // Gérer les erreurs génériques
-            $this->render('errors/default', [
-                'error' => "Erreur: " . $e->getMessage()
-            ]);
+            $this->render('error/default', ['error' => "Erreur: " . $e->getMessage()]);
+        }
+    }
+    
+    private function showAddCarForm() {
+        $this->render('car/add');
+    }
+
+    private function validateFormData($formData) {
+        $validations = [
+            'year' => 'L\'année doit être un nombre valide.',
+            'price' => 'Le prix doit être un nombre valide.',
+            'door_number' => 'Le nombre de portes doit être un nombre valide.',
+            'fiscal_power' => 'La puissance fiscale doit être un nombre valide.',
+        ];
+    
+        foreach ($validations as $key => $errorMessage) {
+            if (!is_numeric($formData[$key])) {
+                throw new \Exception($errorMessage);
+            }
+        }
+
+        if ($_POST['mileage'] < 0) {
+            throw new \Exception('Le kilométrage ne peut pas être négatif.');
+        }
+                
+        if (!preg_match('/^\d{4}$/', $_POST['year'])) {
+            throw new \Exception('L\'année doit être au format YYYY (ex. 2024).');
         }
     }
 
@@ -185,12 +223,10 @@ class CarController extends Controller
         try {
             if (isset($_GET['id'])) {
                 $id = (int)$_GET['id'];
-                // Charger la voiture par un appel au repository
                 $carRepository = new CarRepository();
                 $car = $carRepository->findOneById($id);
 
                 if ($car) {
-                    // Afficher le formulaire d'édition avec les données de la voiture
                     $this->render('car/edit', [
                         'car' => $car
                     ]);
@@ -203,7 +239,7 @@ class CarController extends Controller
             }
 
         } catch (\Exception $e) {
-            $this->render('errors/default', [
+            $this->render('error/default', [
                 'error' => $e->getMessage()
             ]);
         }
@@ -219,22 +255,18 @@ class CarController extends Controller
                 $success = $carRepository->deleteCar($id);
 
                 if ($success) {
-                    // Rediriger vers la liste des véhicules après la suppression réussie
                     header("Location: /index.php");
                     exit;
                 } else {
-                    // Gérer l'échec de la suppression, par exemple, afficher un message d'erreur
                     include 'templates/errors/delete_failed.php';
                 }
             } else {
-                // L'ID est manquant, gérer cela en conséquence
                 $this->render('errors/default', [
                     'error' => "L'ID est manquant"
                 ]);
             }
         } catch (\Exception $e) {
-            // Gérer d'autres exceptions, journaliser l'erreur, etc.
-            $this->render('errors/default', [
+            $this->render('error/default', [
                 'error' => $e->getMessage()
             ]);
         } 

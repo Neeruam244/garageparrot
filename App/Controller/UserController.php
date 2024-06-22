@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Model\UserModel;
 use App\Repository\UserRepository;
+
 
 class UserController extends Controller
 
@@ -15,35 +17,27 @@ class UserController extends Controller
             if (isset ($_GET['action'])){
                 switch ($_GET['action']) {
                     case 'show': 
-                        // appeler méthode show() 
                         $this->show();
                         break;
                     case 'list': 
-                        // appeler méthode list()
                         $this->list();
                         break;
                     case 'edit': 
-                        // appeler méthode edit()
                         $this->edit();
                         break;
                     case 'add': 
-                        // appeler méthode add()
                         $this->add();
                         break;
                     case 'delete': 
-                        // appeler méthode delete()
                         $this->delete();
                         break;
                     case 'connexion': 
-                        // appeler méthode connexion()
                         $this->connexion();
                         break;
                     case 'admin': 
-                        // appeler méthode admin()
                         $this->admin();
                         break; 
                     case 'employe': 
-                        // appeler méthode employe()
                         $this->employe();
                         break;    
                     default : 
@@ -54,7 +48,7 @@ class UserController extends Controller
                 throw new \Exception("Aucune action détectée");
             }
         } catch (\Exception $e) {
-            $this->render('errors/default', [
+            $this->render('error/default', [
                 'error' => $e->getMessage()
             ]);
         }
@@ -80,7 +74,7 @@ class UserController extends Controller
                 throw new \Exception("L'id est manquant");
             }
         } catch(\Exception $e) {
-            $this->render('errors/default', [
+            $this->render('error/default', [
                 'error' => $e->getMessage()
             ]);
         }  
@@ -98,66 +92,54 @@ class UserController extends Controller
             ]);
             
         } catch(\Exception $e) {
-            $this->render('errors/default', [
+            $this->render('error/default', [
                 'error' => $e->getMessage()
             ]);
         }  
+    }
+
+    private $userModel;
+
+    public function __construct($userModel)
+    {
+        $this->userModel = $userModel;
     }
 
     protected function add()
     {
         try {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                // Vérification des données POST
-                $requiredFields = ['firstname', 'lastname', 'email', 'password_hash', 'role'];
-    
-                $missingFields = [];
-                foreach ($requiredFields as $field) {
-                    if (!isset($_POST[$field])) {
-                        $missingFields[] = $field;
-                    }
-                }
-    
-                if (empty($missingFields)) {
-                    // Récupération des données du formulaire POST
-                    $user = [
-                        'firstname' => $_POST['firstname'],
-                        'lastname' => $_POST['lastname'],
-                        'email' => $_POST['email'],
-                        'password_hash' => $_POST['password_hash'],
-                        'role' => $_POST['role']
-                    ];
-    
-                    // Appel au repository pour ajouter la mission
-                    $userRepository = new userRepository();
-                    $success = $userRepository->addUser($user);
-    
-                    if ($success) {
-                        // Redirection après succès
-                        header('Location: /user/list');
-                        exit();
-                    } else {
-                        // Gérer l'erreur d'ajout de mission dans le repository
-                        $this->render('errors/default', [
-                            'error' => "Echec pour ajouter un employé dans le repository."
-                        ]);
-                    }
+                // Récupération des données du formulaire POST
+                $lastname = $_POST['lastname'];
+                $firstname = $_POST['firstname'];
+                $email = $_POST['email'];
+                $password = $_POST['password'];
+                $role = $_POST['role'];
+
+                // Hachage du mot de passe
+                $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+            
+                // Ajouter l'user dans la bdd 
+                $success = $this->userModel->addUser($lastname, $firstname, $email, $hashed_password, $role);
+            
+                if ($success) {
+                    // Redirection vers une page de succès ou affichage d'un message de succès
+                    header("Location: /user?action=list");
+                    exit();
                 } else {
-                    // Gérer les erreurs de données manquantes
-                    $this->render('user/add', [
-                        'error' => 'Il manque des informations: ' . implode(', ', $missingFields)
-                    ]);
-                }
+                    throw new \Exception("Échec de l'ajout de l'utilisateur");
+                }  
             } else {
-                // Afficher le formulaire d'ajout d'employé
-                $this->render('user/add');
-            }
+                $this->showAddUserForm();    
+            } 
+
         } catch (\Exception $e) {
-            // Gérer les erreurs génériques
-            $this->render('errors/default', [
-                'error' => "Erreur: " . $e->getMessage()
-            ]);
+                $this->render('error/default', ['error' => $e->getMessage()]);
         }
+    }
+
+    private function showAddUserForm() {
+        $this->render('user/add');
     }
 
     protected function edit()
@@ -165,12 +147,11 @@ class UserController extends Controller
         try {
             if (isset($_GET['id'])) {
                 $id = (int)$_GET['id'];
-                // Charger la mission par un appel au repository
+
                 $userRepository = new userRepository();
                 $user = $userRepository->findOneById($id);
 
                 if ($user) {
-                    // Afficher le formulaire d'édition avec les données de la mission
                     $this->render('user/edit', [
                         'user' => $user
                     ]);
@@ -183,7 +164,7 @@ class UserController extends Controller
             }
 
         } catch (\Exception $e) {
-            $this->render('errors/default', [
+            $this->render('error/default', [
                 'error' => $e->getMessage()
             ]);
         }
@@ -199,22 +180,18 @@ class UserController extends Controller
                 $success = $userRepository->deleteUser($id);
 
                 if ($success) {
-                    // Rediriger vers la liste des missions après la suppression réussie
                     header("Location: /index.php");
                     exit;
                 } else {
-                    // Gérer l'échec de la suppression, par exemple, afficher un message d'erreur
                     include 'templates/errors/delete_failed.php';
                 }
             } else {
-                // L'ID est manquant, gérer cela en conséquence
-                $this->render('errors/default', [
+                $this->render('error/default', [
                     'error' => "L'ID est manquant"
                 ]);
             }
         } catch (\Exception $e) {
-            // Gérer d'autres exceptions, journaliser l'erreur, etc.
-            $this->render('errors/default', [
+            $this->render('error/default', [
                 'error' => $e->getMessage()
             ]);
         } 
@@ -227,13 +204,13 @@ class UserController extends Controller
                 $userRepository = new userRepository();
                 $user = $userRepository->connexionTo();
      
-                $this->render('user/admin', [
+                $this->render('user/connexion', [
                     'user' => $user
                 ]);
                 
             } catch(\Exception $e) {
                 
-                $this->render('errors/default', [
+                $this->render('error/default', [
                     'error' => $e->getMessage()
                 ]);
             }

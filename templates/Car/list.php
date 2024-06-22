@@ -5,9 +5,7 @@
 <!-- Les différents filtres -->
 <div class="filter">
   <form action="" method ="GET" class="formfiltre w-100">
-
     <div class="row">
-
       <div class="col w-25">
         <label for="mileage-select">Kilométrage</label>
         <select name="mileage" id="mileage-select" class="form-select mb-4">
@@ -44,7 +42,6 @@
           <option value="2020">2020</option>
         </select>
       </div>
-
     </div>
 
     <div class="btnfiltre">

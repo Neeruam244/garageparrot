@@ -87,15 +87,12 @@ class OpeningHoursRepository {
             $success = $query->execute();
     
             if (!$success) {
-                // Gérer l'échec de la suppression (peut-être en lançant une exception)
                 throw new \Exception("Impossible de supprimer les horaires");
             }
     
-            return true; // La suppression a réussi
+            return true; 
         } catch (\Exception $e) {
-            // Gérer l'erreur, par exemple, journaliser l'erreur
-            // Vous pouvez également relancer l'exception pour que le contrôleur puisse la capturer
-            throw $e; // Laissez le contrôleur décider de la façon de gérer cette exception
+            throw $e; 
         }
 
     }

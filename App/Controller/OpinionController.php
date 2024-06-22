@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Model\OpinionModel;
 use App\Repository\OpinionRepository;
 
 class OpinionController extends Controller
@@ -12,19 +13,15 @@ class OpinionController extends Controller
             if (isset ($_GET['action'])){
                 switch ($_GET['action']) {
                     case 'list': 
-                        // appeler méthode list()
                         $this->list();
                         break;
                     case 'edit': 
-                        // appeler méthode edit()
                         $this->edit();
                         break;
                     case 'add': 
-                        // appeler méthode add()
                         $this->add();
                         break;
                     case 'delete': 
-                        // appeler méthode delete()
                         $this->delete();
                         break;
                     default : 
@@ -35,7 +32,7 @@ class OpinionController extends Controller
                 throw new \Exception("Aucune action détectée");
             }
         } catch (\Exception $e) {
-            $this->render('errors/default', [
+            $this->render('error/default', [
                 'error' => $e->getMessage()
             ]);
         }
@@ -52,64 +49,49 @@ class OpinionController extends Controller
             ]);
             
         } catch(\Exception $e) {
-            $this->render('errors/default', [
+            $this->render('error/default', [
                 'error' => $e->getMessage()
             ]);
         }  
     } 
+
+    private $opinionModel;
+
+    public function __construct($opinionModel)
+    {
+        $this->opinionModel = $opinionModel;
+    }
 
     protected function add()
     {
         try {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Vérification des données POST
-                $requiredFields = ['client_name', 'opinion', 'note'];
-    
-                $missingFields = [];
-                foreach ($requiredFields as $field) {
-                    if (!isset($_POST[$field])) {
-                        $missingFields[] = $field;
-                    }
-                }
-    
-                if (empty($missingFields)) {
-                    // Récupération des données du formulaire POST
-                    $opinion = [
-                        'client_name' => $_POST['client_name'],
-                        'opinion' => $_POST['opinion'],
-                        'note' => $_POST['note']
-                    ];
-    
-                    // Appel au repository pour ajouter la mission
-                    $opinionRepository = new OpinionRepository();
-                    $success = $opinionRepository->addOpinion($opinion);
+                $client_name = $_POST['client_name'];
+                $opinion = $_POST['opinion'];
+                $note = $_POST['note'];
+
+                $success = $this->opinionModel->addOpinion($client_name, $opinion, $note);
     
                     if ($success) {
-                        // Redirection après succès
-                        header('Location: /opinion/list');
+                        header('Location: /opinion?action=list');
                         exit();
                     } else {
-                        // Gérer l'erreur d'ajout de mission dans le repository
-                        $this->render('errors/default', [
-                            'error' => "Echec pour ajouter un témoignage dans le repository."
-                        ]);
+                        throw new \Exception("Échec de l'ajout de l'opinion du client");
                     }
-                } else {
-                    // Gérer les erreurs de données manquantes
-                    $this->render('opinion/add', [
-                        'error' => 'Il manque des informations: ' . implode(', ', $missingFields)
-                    ]);
-                }
             } else {
-                // Afficher le formulaire d'ajout de mission
-                $this->render('opinion/add');
+                $this->showAddOpinionForm();  
             }
+            
         } catch (\Exception $e) {
-            // Gérer les erreurs génériques
-            $this->render('errors/default', [
+            $this->render('error/default', [
                 'error' => "Erreur: " . $e->getMessage()
             ]);
         }
+    }
+
+    private function showAddOpinionForm() {
+        $this->render('opinion/add');
     }
 
     protected function edit()
@@ -117,12 +99,10 @@ class OpinionController extends Controller
         try {
             if (isset($_GET['id'])) {
                 $id = (int)$_GET['id'];
-                // Charger la mission par un appel au repository
                 $opinionRepository = new OpinionRepository();
                 $opinion = $opinionRepository->findOneById($id);
 
                 if ($opinion) {
-                    // Afficher le formulaire d'édition avec les données de la mission
                     $this->render('opinion/edit', [
                         'opinion' => $opinion
                     ]);
@@ -135,7 +115,7 @@ class OpinionController extends Controller
             }
 
         } catch (\Exception $e) {
-            $this->render('errors/default', [
+            $this->render('error/default', [
                 'error' => $e->getMessage()
             ]);
         }
@@ -151,22 +131,18 @@ class OpinionController extends Controller
                 $success = $opinionRepository->deleteOpinion($id);
 
                 if ($success) {
-                    // Rediriger vers la liste des missions après la suppression réussie
                     header("Location: /index.php");
                     exit;
                 } else {
-                    // Gérer l'échec de la suppression, par exemple, afficher un message d'erreur
                     include 'templates/errors/delete_failed.php';
                 }
             } else {
-                // L'ID est manquant, gérer cela en conséquence
-                $this->render('errors/default', [
+                $this->render('error/default', [
                     'error' => "L'ID est manquant"
                 ]);
             }
         } catch (\Exception $e) {
-            // Gérer d'autres exceptions, journaliser l'erreur, etc.
-            $this->render('errors/default', [
+            $this->render('error/default', [
                 'error' => $e->getMessage()
             ]);
         } 
