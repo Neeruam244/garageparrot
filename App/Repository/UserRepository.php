@@ -3,6 +3,7 @@
 namespace App\Repository; 
 
 use App\Entity\User;
+use App\Model\UserModel;
 use App\Db\Mysql;
 use App\Tools\StringTools;
 
@@ -13,7 +14,6 @@ class UserRepository
     {
         //Appel BDD
         $mysql = Mysql::getInstance();
-
         $pdo = $mysql->getPDO();
 
         $query = $pdo->prepare('SELECT * FROM user WHERE id_user = :id_user');
@@ -61,24 +61,24 @@ class UserRepository
         return $query->execute();
     }
 
+    
+    public function updateUser(User $user) {
 
-    public function UpdateUser(int $id_user, array $user)
-    {
         //Appel BDD
         $mysql = Mysql::getInstance();
         $pdo = $mysql->getPDO();
 
-        $query = $pdo->prepare('UPDATE user SET lastname = :lastname, firstname = :firstname, email = :email, password_hash = :password_hash, role = :role WHERE id_user = :id_user');
+        $query = $pdo->prepare("UPDATE user SET lastname = :lastname, firstname = :firstname, email = :email, hashed_password = :hashed_password, role = :role WHERE id_user = :id_user");
 
-        $query->bindValue(':id_user', $id_user, $pdo::PARAM_INT);
-        $query->bindValue(':lastname', $user['lastname']);
-        $query->bindValue(':firstname', $user['firstname']);
-        $query->bindValue(':email', $user['email']);
-        $query->bindValue(':password_hash', $user['password_hash']);
-        $query->bindValue(':role', $user['role']);
+        // Lier les paramètres
+        $query->bindValue(':id_user', $user->getIdUser(), $pdo::PARAM_INT);
+        $query->bindValue(':lastname', $user->getLastname());
+        $query->bindValue(':firstname', $user->getFirstname());
+        $query->bindValue(':email', $user->getEmail());
+        $query->bindValue(':hashed_password', $user->getHashedPassword());
+        $query->bindValue(':role', $user->getRole());
 
-        $query->execute();
-
+        return $query->execute();
     }
 
     public function DeleteUser(int $id_user): bool
@@ -115,13 +115,15 @@ class UserRepository
                 
             if ($this->controlConnexion($email, $password)) {
                 $userRole = $this->RoleUser($email); 
+
+                setcookie('user_role', $userRole, time() + 86400, "/", "", true, true);
                
 
                 // Redirection en fonction du rôle de l'utilisateur
                 if ($userRole === "administrateur") {
                     header("Location: /index.php?controller=user&action=admin");
                     exit();
-                } elseif ($userRole === "employé") {
+                } elseif ($userRole === "employe") {
                     header("Location: /index.php?controller=user&action=employe");
                     exit();
                 } else {
@@ -149,7 +151,6 @@ class UserRepository
 
                 $user = $query->fetch();
   
-            //Vérification du mot de passe haché
                 if ($user && password_verify($password, $user['hashed_password'])) {
                     return true;
                 } else {
@@ -157,8 +158,6 @@ class UserRepository
                    return false;
                 }
         } catch (\Exception $e) {
-            // Gestion des erreurs de base de données
-            // Vous pouvez enregistrer l'erreur dans un fichier de log ou afficher un message d'erreur
             error_log("Erreur de connexion à la base de données: " . $e->getMessage());
             return false;
         }

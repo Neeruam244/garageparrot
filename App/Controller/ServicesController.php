@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Services;
 use App\Model\ServicesModel;
 use App\Repository\ServicesRepository;
 
 class ServicesController extends Controller
 {
+
     public function route(): void
     {
         try{
@@ -18,8 +20,8 @@ class ServicesController extends Controller
                     case 'list': 
                         $this->list();
                         break;
-                    case 'edit': 
-                        $this->edit();
+                    case 'update': 
+                        $this->update();
                         break;
                     case 'add': 
                         $this->add();
@@ -39,8 +41,6 @@ class ServicesController extends Controller
                 'error' => $e->getMessage()
             ]);
         }
-
-        
     }
 
     protected function show()
@@ -85,13 +85,15 @@ class ServicesController extends Controller
         }  
     }
 
+    //Ajouter un service
+
     private $servicesModel;
 
     public function __construct($servicesModel)
     {
         $this->servicesModel = $servicesModel;
     }
-    
+
     protected function add()
     {
         try {
@@ -122,32 +124,73 @@ class ServicesController extends Controller
         $this->render('services/add');
     }
 
-    protected function edit()
-    {
+
+    //Mettre à jour un service
+
+    public function update() {
         try {
-            if (isset($_GET['id'])) {
-                $id = (int)$_GET['id'];
-                $servicesRepository = new servicesRepository();
-                $services = $servicesRepository->findOneById($id);
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                if (!empty($_POST['id_service'])) {
+                    $id_service = $_POST['id_service'];
+                } else {
+                    throw new \Exception("ID du service non spécifié.");
+                }
+                $title = $_POST['title'];
+                $text_presentation = $_POST['text_presentation'];
+                $list = $_POST['list'];
+                $picture = $_POST['picture'];
+
+                $services = $this->servicesModel->getServiceById($id_service);
 
                 if ($services) {
-                    $this->render('services/edit', [
-                        'services' => $services
-                    ]);
+                    $services->setTitle($title)
+                            ->setTextPresentation($text_presentation)
+                            ->setList($list)
+                            ->setPicture($picture);
+
+                    $success = $this->servicesModel->updateService($services);
+
+                    if ($success) {
+                        header("Location: /index.php?controller=services&action=list");
+                        exit();
+                    } else {
+                        throw new \Exception("Échec de la mise à jour du service.");
+                    }
                 } else {
-                    throw new \Exception("Véhicule non trouvée");
+                    throw new \Exception("Service non trouvé avec l'ID spécifié.");
                 }
             } else {
-                throw new \Exception("L'id est manquant");
-
+                if (!empty($_GET['id'])) {
+                    $id_service = $_GET['id'];
+                    $this->showUpdateServicesForm($id_service);
+                } else {
+                    throw new \Exception("ID du service non spécifié pour afficher le formulaire de mise à jour.");
+                }
             }
-
         } catch (\Exception $e) {
-            $this->render('errors/default', [
-                'error' => $e->getMessage()
-            ]);
+            $this->render('error/default', ['error' => $e->getMessage()]);
         }
     }
+
+    private function showUpdateServicesForm($id_service) {
+        try {
+            if (!empty($id_service)) {
+                $services = $this->servicesModel->getServiceById($id_service);
+
+                if (!$services) {
+                    throw new \Exception("Service non trouvé avec l'ID spécifié.");
+                }
+
+                $this->render('services/update', ['services' => $services]);
+            } else {
+                throw new \Exception("ID du service non spécifié pour afficher le formulaire de mise à jour.");
+            }
+        } catch (\Exception $e) {
+            $this->render('error/default', ['error' => $e->getMessage()]);
+        }
+    }
+
+    //Supprimer un service
 
     protected function delete()
     {

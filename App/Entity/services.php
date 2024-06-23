@@ -5,10 +5,10 @@ namespace App\Entity;
 class Services 
 {
     protected ?int $id_service = null;
-    protected string $title;
-    protected string $text_presentation;
-    protected string $list;
-    protected string $picture;
+    protected string $title = '';
+    protected string $text_presentation = '';
+    protected string $list = '';
+    protected string $picture = '';
 
     
 

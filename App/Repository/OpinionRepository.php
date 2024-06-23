@@ -59,23 +59,6 @@ class OpinionRepository {
         return $query->execute();
     }
 
-    public function UpdateOpinion(int $id_opinion, array $opinion)
-    {
-        //Appel BDD
-        $mysql = Mysql::getInstance();
-        $pdo = $mysql->getPDO();
-
-        $query = $pdo->prepare('UPDATE opinion SET client_name = :client_name, opinion = :opinion, note = :note WHERE id_opinion = :id_opinion');
-
-        $query->bindValue(':id_opinion', $id_opinion, $pdo::PARAM_INT);
-        $query->bindValue(':client_name', $opinion['client_name']);
-        $query->bindValue(':opinion', $opinion['opinion']);
-        $query->bindValue(':note', $opinion['note']);
-        
-        $query->execute();
-
-    }
-
     public function DeleteOpinion(int $id_opinion):bool
     {
         try {

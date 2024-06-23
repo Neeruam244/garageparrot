@@ -11,6 +11,9 @@ use App\Repository\OpinionRepository;
 use App\Model\OpinionModel;
 use App\Repository\CarRepository;
 use App\Model\CarModel;
+use App\Entity\openingHours;
+use App\Repository\OpeningHoursRepository;
+use App\Model\OpeningHoursModel;
 
 class Controller 
 {
@@ -52,7 +55,9 @@ class Controller
                         $servicesController->route();
                         break;
                     case 'openinghours': 
-                        $openinghoursController = new OpeningHoursController();
+                        $openinghoursRepository = new OpeningHoursRepository();
+                        $openingHoursModel = new OpeningHoursModel($openinghoursRepository);
+                        $openinghoursController = new OpeningHoursController($openingHoursModel);
                         $openinghoursController->route();
                         break;
                     case 'user': 
@@ -61,6 +66,35 @@ class Controller
                         $userController = new UserController($userModel);
                         $userController->route();
                         break;
+                    case 'dashboard': 
+                        // Exemple de gestion du tableau de bord
+                        if (isset($_COOKIE['user_role'])) {
+                            $user_role = $_COOKIE['user_role'];
+                            switch ($user_role) {
+                                    case 'administrateur':
+                                        // Charger la vue admin.php
+                                            $this->render('user/admin', [
+                                            'user_role' => $user_role,
+                                            'message' => 'Bienvenue dans votre back office admnistrateur.'
+                                            ]);
+                                        break;
+                                    case 'employe':
+                                        // Charger la vue employe.php
+                                            $this->render('user/employe', [
+                                            'user_role' => $user_role,
+                                            'message' => 'Bienvenue dans votre back office employé.'
+                                            ]);
+                                        break;
+                                    default:
+                                        echo "Rôle non reconnu.";
+                                        break;
+                                }
+                        } else {
+                            // Redirection si le cookie n'est pas défini
+                            header("Location: /login");
+                            exit();
+                        }
+                    break;
                     default : 
                         throw new \Exception("Le controleur n'existe pas");
                         break;

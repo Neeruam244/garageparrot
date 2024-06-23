@@ -1,36 +1,38 @@
-<h3>Les horaires du garage</h3>
+<div class="container mt-5">
 
-<?php  foreach ($openinghours as $o) : ?>
-
+<h5>Liste des horaires d'ouverture</h5>
     
-<?php endforeach; ?>
+    <?php if (isset($openingHours) && !empty($openingHours)): ?>
+        <form method="post" action="/index.php?controller=openinghours&action=updateAll">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Jour</th>
+                        <th>Heure d'ouverture</th>
+                        <th>Heure de fermeture</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($openingHours as $hour): ?>
+                        <tr>
+                            <td>
+                                <input type="hidden" name="id_opeinghours" value="<?= $hour->getIdOpeninghours() ?>">
+                                <input type="text" name="day_of_week" value="<?= $hour->getDayOfWeek() ?>">
+                            </td>
+                            <td>
+                                <input type="time" name="opening_time" value="<?= $hour->getOpeningTime() ?>">
+                            </td>
+                            <td>
+                                <input type="time" name="closing_time" value="<?= $hour->getClosingTime() ?>">
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+            <button type="submit">Mettre à jour les horaires</button>
+        </form>
+    <?php else: ?>
+        <p>Aucun horaire d'ouverture trouvé.</p>
+    <?php endif; ?>
 
-<form id="openingHoursForm" action="" method="post">
-  <table>
-    <thead>
-      <tr>
-        <th>Jour</th>
-        <th>Heure d'ouverture</th>
-        <th>Heure de fermeture</th>
-      </tr>
-    </thead>
-    <tbody>
-    <?php  foreach ($openinghours as $o) : ?>
-        <tr>
-            <td>
-              <input type="text" name="day_of_week" value="<?= htmlspecialchars($o["day_of_week"])?>">
-            </td>
-            <td>
-              <input type="text" name="opening_time" value="<?= htmlspecialchars($o["opening_time"])?>">
-              <span class="error-message opening-time-error-message"></span>
-            </td>
-            <td>
-              <input type="text" name="closing_time" value="<?= htmlspecialchars($o["closing_time"])?>">
-              <span class="error-message closing-time-error-message"></span>
-            </td>
-        </tr>
-
-    </tbody>
-    <?php endforeach; ?>
-  </table>
-</form>
+</div>

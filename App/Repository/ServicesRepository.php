@@ -3,30 +3,32 @@
 namespace App\Repository; 
 
 use App\Entity\Services;
+use App\Model\ServicesModel;
 use App\Db\Mysql;
 use App\Tools\StringTools;
 
 
 class ServicesRepository {
 
-    public function findOneById(int $id_service)
+    public function findOneById($id_service)
     {
         //Appel BDD
         $mysql = Mysql::getInstance();
-        
         $pdo = $mysql->getPDO();
         
         $query = $pdo->prepare('SELECT * FROM services WHERE id_service = :id_service');
         $query->bindValue(':id_service', $id_service, $pdo::PARAM_INT);
         $query->execute();
         $services = $query->fetch($pdo::FETCH_ASSOC);
-        $servicesEntity = new Services();
 
-        foreach ($services as $key => $value) {
-            $servicesEntity->{'set'.StringTools::toPascalCase($key) }($value);
+        if ($services) {
+            $servicesEntity = new Services();
+            foreach ($services as $key => $value) {
+                $servicesEntity->{'set'.StringTools::toPascalCase($key) }($value);
+            }
+            return $servicesEntity;
         }
-
-        return $servicesEntity;
+        return null;
     }
 
     public function findAll()
@@ -60,7 +62,7 @@ class ServicesRepository {
         return $query->execute();
     }
 
-    public function UpdateCar(int $id_service, array $services)
+    public function updateServices($services)
     {
         //Appel BDD
         $mysql = Mysql::getInstance();
@@ -68,13 +70,13 @@ class ServicesRepository {
 
         $query = $pdo->prepare('UPDATE services SET title = :title, text_presentation = :text_presentation, list = :list, picture = :picture WHERE id_service = :id_service');
 
-        $query->bindValue(':id_service', $id_service, $pdo::PARAM_INT);
-        $query->bindValue(':title', $services['title']);
-        $query->bindValue(':text_presentation', $services['text_presentation']);
-        $query->bindValue(':list', $services['list']);
-        $query->bindValue(':picture', $services['picture']);
+        $query->bindValue(':id_service', $services->getIdService(), $pdo::PARAM_INT);
+        $query->bindValue(':title', $services->getTitle());
+        $query->bindValue(':text_presentation', $services->getTextPresentation());
+        $query->bindValue(':list', $services->getList());
+        $query->bindValue(':picture', $services->getPicture());
         
-        $query->execute();
+        return $query->execute();
 
     }
 
@@ -86,7 +88,6 @@ class ServicesRepository {
     
             $query = $pdo->prepare('DELETE FROM services WHERE id_service = :id_service');
             $query->bindValue(':id_service', $id_service, $pdo::PARAM_INT);
-    
             $success = $query->execute();
     
             if (!$success) {
@@ -97,6 +98,5 @@ class ServicesRepository {
         } catch (\Exception $e) {
             throw $e; 
         }
-
     }
 }

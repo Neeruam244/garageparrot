@@ -10,7 +10,6 @@ class openingHours
     protected ?string $closing_time = null;
 
 
-
     /**
      * Get the value of id_openinghours
      */

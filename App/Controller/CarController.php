@@ -145,9 +145,17 @@ class CarController extends Controller
 
                 // Gestion des images supplémentaires
                     $additionalPicturesData = [];
-                        if (!empty($_FILES['picture1']['name']) && is_array($_FILES['picture1']['name'])) {
+                        if (!empty($_FILES['picture1']['name'][0]) && is_array($_FILES['picture1']['name'])) {
                             foreach ($_FILES['picture1']['name'] as $key => $name) {
+
                                 if ($_FILES['picture1']['error'][$key] === UPLOAD_ERR_OK) {
+
+                                    //Vérification du type MIME si nécessaire
+                                    $mime_type = $_FILES['picture1']['type'][$key];
+                                    if (!in_array($mime_type, ['image/jpeg', 'image/png', 'image/gif'])) {
+                                        throw new \Exception('Type de fichier non supporté : ' . $mime_type);
+                                    }
+
                                     $tmp_name = $_FILES['picture1']['tmp_name'][$key];
                                     $uploadFile = $uploadDir . basename($name);
 

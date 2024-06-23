@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\openingHours;
+use App\Model\openingHoursModel;
 use App\Repository\OpeningHoursRepository;
 
 class OpeningHoursController extends Controller
@@ -11,23 +13,11 @@ class OpeningHoursController extends Controller
         try{
             if (isset ($_GET['action'])){
                 switch ($_GET['action']) {
-                    case 'show': 
-                        $this->show();
-                        break;
-                    case 'list': 
-                        $this->list();
-                        break;
-                    case 'edit': 
-                        $this->edit();
-                        break;
-                    case 'add': 
-                        $this->add();
-                        break;
-                    case 'delete': 
-                        $this->delete();
+                    case 'updateAll': 
+                        $this->updateAll();
                         break;
                     default : 
-                        throw new \Exception("Cette action n'existe pas : ".$_GET['action']);
+                        $this->list();
                         break;
                 }
             } else {
@@ -38,145 +28,51 @@ class OpeningHoursController extends Controller
                 'error' => $e->getMessage()
             ]);
         }
-
-        
     }
 
-    protected function show()
-    {
-        try{
-            if (isset($_GET['id'])) {
-
-                $id = (int)$_GET['id'];
-                $OpeningHoursRepository = new OpeningHoursRepository();
-                $openinghours = $OpeningHoursRepository->findOneById($id);
-
-
-                $this->render('openinghours/show', [
-                    'openinghours' => $openinghours
-                ]);
-            } else {
-                throw new \Exception("L'id est manquant");
-            }
-        } catch(\Exception $e) {
-            $this->render('errors/default', [
-                'error' => $e->getMessage()
-            ]);
-        }  
-    }
-
-    protected function list()
-    {
-        try{
-            $OpeningHoursRepository = new OpeningHoursRepository();
-            $openinghours = $OpeningHoursRepository->findAll();
-
-
-            $this->render('openinghours/list', [
-                'openinghours' => $openinghours
-            ]);
-            
-        } catch(\Exception $e) {
-            $this->render('errors/default', [
-                'error' => $e->getMessage()
-            ]);
-        }  
-    }
-
-    protected function add()
-    {
+    public function list() {
         try {
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                // Vérification des données POST
-                $requiredFields = ['day_of_week', 'opening_time', 'closing_time'];
-    
-                $missingFields = [];
-                foreach ($requiredFields as $field) {
-                    if (!isset($_POST[$field])) {
-                        $missingFields[] = $field;
-                    }
-                }
-    
-                if (empty($missingFields)) {
-                    // Récupération des données du formulaire POST
-                    $openinghours = [
-                        'day_of_week' => $_POST['day_of_week'],
-                        'opening_time' => $_POST['opening_time'],
-                        'closing_time' => $_POST['closing_time']
-                    ];
-    
-                    $OpeningHoursRepository = new OpeningHoursRepository();
-                    $success = $OpeningHoursRepository->addOpeningHours($openinghours);
-    
-                    if ($success) {
-                        header('Location: /openinghours/list');
-                        exit();
-                    } else {
-                        $this->render('errors/default', [
-                            'error' => "Echec pour ajouter des horaires dans le repository."
-                        ]);
-                    }
-                } else {
-                    $this->render('openinghours/add', [
-                        'error' => 'Il manque des informations: ' . implode(', ', $missingFields)
-                    ]);
-                }
-            } else {
-                $this->render('openinghours/add');
-            }
+            $openingHours = $this->openingHoursModel->getAllOpeningHours();
+            $this->render('openinghours/list', ['openingHours' => $openingHours]);
         } catch (\Exception $e) {
-            $this->render('errors/default', [
-                'error' => "Erreur: " . $e->getMessage()
-            ]);
+            $this->render('error/default', ['error' => $e->getMessage()]);
         }
     }
 
-    protected function edit()
-    {
-        try {
-                $OpeningHoursRepository = new OpeningHoursRepository();
-                $openinghours = $OpeningHoursRepository->findAll();
+    //Mettre à jour les horaires
 
-                if ($openinghours) {
-                    $this->render('openinghours/edit', [
-                        'openinghours' => $openinghours
-                    ]);
-                } else {
-                    throw new \Exception("Planning non trouvée");
-                }
-        } catch (\Exception $e) {
-            $this->render('errors/default', [
-                'error' => $e->getMessage()
-            ]);
-        }
+    private $openingHoursModel;
+
+    public function __construct(OpeningHoursModel $openingHoursModel)
+    {
+        $this->openingHoursModel = $openingHoursModel;
     }
 
-    protected function delete()
+    protected function updateAll()
     {
         try {
-            if (isset($_GET['id'])) {
-                $id = (int)$_GET['id'];
+            if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['openinghours']) && !empty($_POST['openinghours'])) {
+                $openingHours = $_POST['openinghours'];
 
-                $OpeningHoursRepository = new OpeningHoursRepository();
-                $success = $OpeningHoursRepository->deleteOpeningHours($id);
-
-                if ($success) {
-                    header("Location: /index.php");
-                    exit;
-                } else {
-                    include 'templates/errors/delete_failed.php';
+                foreach ($openingHours as $hour) {
+                    $openingHour = new OpeningHours();
+                    $openingHour->setIdOpeningHours($hour['id_openinghours'])
+                                ->setDayOfWeek($hour['day_of_week'])
+                                ->setOpeningTime($hour['opening_time'])
+                                ->setClosingTime($hour['closing_time']);
+                    $this->openingHoursModel->updateOpeningHours($openingHour);
                 }
+
+                header("Location: /index.php?controller=openinghours&action=list");
+                exit();
             } else {
-                $this->render('errors/default', [
-                    'error' => "L'ID est manquant"
-                ]);
+                throw new \Exception("Aucune donnée d'horaires à mettre à jour.");
             }
         } catch (\Exception $e) {
-            $this->render('errors/default', [
-                'error' => $e->getMessage()
-            ]);
-        } 
+            $this->render('error/default', ['error' => $e->getMessage()]);
+        }
     }
-
 }
+
+   
 

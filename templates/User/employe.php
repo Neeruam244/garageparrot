@@ -1,12 +1,12 @@
 <?php require_once _ROOTPATH_.'\templates\header.php'; ?>
 
-<div class="container" style="margin-left:100px; margin-top:30px;">
+  <div class="container" style="margin-left:100px; margin-top:30px;">
     <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 ms-5 border-bottom">
 
       <ul class="nav col-10 col-md-auto mb-2 justify-content-center mb-md-0">
         <li><a href="/index.php?controller=user&action=admin" class="nav-link px-2 link-secondary">Accueil</a></li>
-        <li><a href="#" class="nav-link px-2">Les véhicules d'occasions</a></li>
-        <li><a href="/index.php?controller=openinghours&action=edit" class="nav-link px-2">Les témoignages clients</a></li>
+        <li><a href="#voitures" class="nav-link px-2">Les véhicules d'occasions</a></li>
+        <li><a href="#opinion" class="nav-link px-2">Les témoignages clients</a></li>
       </ul>
 
       <div class="col-md-2 text-end">
@@ -15,24 +15,19 @@
         </form>
       </div>
     </header>
-</div>
+  </div>
 
-<section>
-  <h2>Les véhicules d'occasions</h2>
+  <section id="voitures">
+    <h2 style="margin-left:100px;">Les véhicules d'occasions</h2>
 
-  <?php 
-    require_once _ROOTPATH_.'\templates\Car\add.php';
-  ?>
-</section>
+      <?php require_once _ROOTPATH_.'\templates\Car\add.php'; ?>
 
-<section>
-  <h2>Les témoignages clients</h2>
+  </section>
 
-  <?php
-    
-    
-    require_once _ROOTPATH_.'\templates\Opinion\add.php';
-  ?>
-</section>
+  <section id="opinion">
+    <h2 style="margin-left:100px;">Les témoignages clients</h2>
+
+      <?php require_once _ROOTPATH_.'\templates\Opinion\add.php'; ?>
+  </section>
 
 <?php  require_once _ROOTPATH_.'\templates\footer.php'; ?>

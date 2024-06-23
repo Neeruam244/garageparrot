@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\user;
 use App\Model\UserModel;
 use App\Repository\UserRepository;
 
@@ -22,11 +23,11 @@ class UserController extends Controller
                     case 'list': 
                         $this->list();
                         break;
-                    case 'edit': 
-                        $this->edit();
-                        break;
                     case 'add': 
                         $this->add();
+                        break;
+                    case 'update': 
+                        $this->update();
                         break;
                     case 'delete': 
                         $this->delete();
@@ -98,6 +99,8 @@ class UserController extends Controller
         }  
     }
 
+    //Ajouter un utilisateur 
+
     private $userModel;
 
     public function __construct($userModel)
@@ -142,33 +145,52 @@ class UserController extends Controller
         $this->render('user/add');
     }
 
-    protected function edit()
-    {
+    //Mettre à jour un utilisateur
+
+    public function update() {
         try {
-            if (isset($_GET['id'])) {
-                $id = (int)$_GET['id'];
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $id_user = $_POST['id_user'];
+                $lastname = $_POST['lastname'];
+                $firstname = $_POST['firstname'];
+                $email = $_POST['email'];
+                $password = $_POST['password'];
+                $role = $_POST['role'];
 
-                $userRepository = new userRepository();
-                $user = $userRepository->findOneById($id);
+                $hashed_password = password_hash($password, PASSWORD_BCRYPT);
 
-                if ($user) {
-                    $this->render('user/edit', [
-                        'user' => $user
-                    ]);
+                $user = new User();
+                $user->setIdUser($id_user)
+                     ->setLastname($lastname)
+                     ->setFirstname($firstname)
+                     ->setEmail($email)
+                     ->setHashedPassword($hashed_password)
+                     ->setRole($role);
+
+                $success = $this->userModel->updateUser($user);
+
+                if ($success) {
+                    header("Location: /user?action=list");
+                    exit();
                 } else {
-                    throw new \Exception("Employé non trouvé");
+                    throw new \Exception("Échec de la mise à jour de l'utilisateur");
                 }
             } else {
-                throw new \Exception("L'id est manquant");
-
+                $id_user = $_GET['id_user'];
+                $this->showUpdateUserForm($id_user);
             }
-
         } catch (\Exception $e) {
-            $this->render('error/default', [
-                'error' => $e->getMessage()
-            ]);
+            $this->render('error/default', ['error' => $e->getMessage()]);
         }
     }
+
+    private function showUpdateUserForm($id_user) {
+        $user = $this->userModel->getUserById($id_user);
+        $this->render('user/update', ['user' => $user]);
+    }
+
+
+    //Supprimer un utilisateur
 
     protected function delete()
     {
@@ -196,6 +218,8 @@ class UserController extends Controller
             ]);
         } 
     }
+
+    //Connexion au back office
 
     protected function connexion()
     {

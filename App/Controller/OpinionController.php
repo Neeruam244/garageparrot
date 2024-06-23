@@ -15,9 +15,6 @@ class OpinionController extends Controller
                     case 'list': 
                         $this->list();
                         break;
-                    case 'edit': 
-                        $this->edit();
-                        break;
                     case 'add': 
                         $this->add();
                         break;
@@ -92,33 +89,6 @@ class OpinionController extends Controller
 
     private function showAddOpinionForm() {
         $this->render('opinion/add');
-    }
-
-    protected function edit()
-    {
-        try {
-            if (isset($_GET['id'])) {
-                $id = (int)$_GET['id'];
-                $opinionRepository = new OpinionRepository();
-                $opinion = $opinionRepository->findOneById($id);
-
-                if ($opinion) {
-                    $this->render('opinion/edit', [
-                        'opinion' => $opinion
-                    ]);
-                } else {
-                    throw new \Exception("Témoignage non trouvée");
-                }
-            } else {
-                throw new \Exception("L'id est manquant");
-
-            }
-
-        } catch (\Exception $e) {
-            $this->render('error/default', [
-                'error' => $e->getMessage()
-            ]);
-        }
     }
 
     protected function delete()

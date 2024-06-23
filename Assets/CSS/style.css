@@ -4,7 +4,7 @@ html body{
     font-family: 'barlow', sans-serif;
     z-index: 1;
 }
-h1, h2, h3, h4, h5{
+h1, h2, h3{
     font-family: 'Acme', sans-serif;
 }
 /* ---NAVBAR--- */ 
@@ -400,6 +400,11 @@ footer{
         padding-bottom: 50px;
         margin-right: 100px;
     }
+    .mecanique{
+        padding: 50px;
+        padding-bottom: 50px;
+        margin-right: 50px;
+    }
     .carrosserie{
         background: #ffb700;
         padding: 50px;
@@ -419,7 +424,7 @@ footer{
         margin-right: 10px;
     }
     .section-servicess{
-        margin-bottom: 90px;
+        margin-bottom: 150px;
     }
     .contain-services{
         margin-bottom: 50px;
@@ -439,16 +444,28 @@ footer{
         margin-left: 150px;
     }
     .photos-servicess{
-        width: 400px;
-        height: 250px;
+        width: 350px;
+        height: 200px;
         float: right; 
         clear: right;
-        margin: 10px 50px 10px 50px;
+        margin: 0px 50px 0px 50px;
     }
     .para-servicess{
         font-size: 18px;
         margin: 20px 20px 100px 100px;
     }
+}
+@media screen and (min-width: 1600px){
+    .section-servicess{
+        margin-bottom: 250px;
+    }
+    .photos-servicess{
+        width: 400px;
+        height: 250px;
+        float: right; 
+        clear: right;
+        margin: 0px 50px 0px 50px;
+    }  
 }
 
 /*   --- BIENVENUE ---  */
@@ -813,8 +830,6 @@ q {
     font-size: 20px;
     text-align: center;
 }
-
-
 .rating {
     display: flex;
     flex-direction: row-reverse;
@@ -1120,7 +1135,7 @@ select{
         text-align: left;
     }
     .filter{
-        margin:50px 100px 10px 100px;
+        margin:20px 100px 10px 100px;
     }
     .type-filter{
         display: block;
@@ -1161,7 +1176,7 @@ select{
         margin: 10px;
     }
     .container{
-        margin : 90px;
+        margin :20px 90px 20px 90px;
     }
     .wrapper {
         display: inline-block;
@@ -1255,6 +1270,13 @@ select{
         transition: all .3s ease;  
     }
 }
+@media screen and (min-width: 1600px){
+    .container{
+        margin-top : 20px;
+        margin-left : 150px; 
+        margin-right: 150px;
+    }
+}
 
 /*  --- PAGE DETAILS DES VEHICULES ---  */
 .title-model{
@@ -1294,7 +1316,7 @@ select{
 .gauche{
     margin : auto;
 }
-/*------------- SlideImg -------------*/
+    /*------------- SlideImg -------------*/
 .corps-presentation{
     display: inline-flex;
     flex-wrap: wrap;
@@ -1355,7 +1377,8 @@ select{
     display: inline-block;
     transition: background-color 0.6s ease;
 }
-.active, .dot:hover { background-color: #111111; }
+.active, .dot:hover 
+{ background-color: #111111; }
 .fade {
     animation-name: fade;
     animation-duration: 1s;
@@ -1364,7 +1387,7 @@ select{
     from {opacity: 0} 
     to {opacity: 1}
 }
-/*------------- Tableaux -------------*/
+    /*------------- Tableaux -------------*/
 table{
     display: inline-table;
     vertical-align: top;
@@ -1508,7 +1531,9 @@ td{
 }
 
 /*  --- BACK OFFICE ADMIN ---   */
-
+.titleadmin{
+    margin-left:150px;
+}
 
 /*  --- BACK OFFICE EMPLOYE ---   */
 
